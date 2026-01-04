@@ -10,6 +10,9 @@ import SignIn from './components/Companyies/SignIn/SignIn'
 
 import NavBar from './components/Companyies/NavBar/NavBar'
 import Home from './components/Companyies/Home/Home'
+import CompanyFooter from './components/Companyies/Footer/Footer'
+import Profile  from './components/Companyies/Profile/Profile'
+
 import CompanyiesForm from './components/Companyies/CompanyiesForm/CompanyiesForm'
 import FlightsList from './components/Companyies/FlightsList/FlightsList'
 
@@ -30,7 +33,7 @@ const App = () => {
       }
     }
     fetchFlights()
-  }, [])
+  }, [user])
 
 
   const handleSignUp = async (formData) => {
@@ -143,8 +146,15 @@ const handleSelectFlight = (flight) => {
           }
         />
 
+        <Route path="/profile" element={<Profile />} />
+
+
         <Route path="*" element={<h1>404 Page Not Found, Plase Try agein</h1>} />
+
       </Routes>
+
+           <CompanyFooter />
+
     </>
   )
 }

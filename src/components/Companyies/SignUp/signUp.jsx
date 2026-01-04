@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const SignUp = (props) => {
 
@@ -146,6 +146,9 @@ const SignUp = (props) => {
         {error && <p style={{color: 'red'}}>{error}</p>}
 
       </form>
+
+        <p> You have an account? <Link to="/sign-in">Sign In</Link> </p>
+
     </main>
   )
 }

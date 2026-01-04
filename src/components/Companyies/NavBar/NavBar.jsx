@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom'
+import logo from '../../../assets/Logo-sifraty.png';
+
 
 const NavBar = ({ user, handleLogout }) => {
   return (
     <nav style={styles.nav}>
+
+<Link to="/"><img src={logo} alt="Sifraty Logo" /></Link>
+
       <h2 style={styles.logo}>Sifraty</h2>
 
       <div style={styles.links}>
         <Link to="/">Home</Link>
         <Link to="/flights/new">Flights Form</Link>
-        <Link to="/flights">FlightsList</Link>
+        <Link to="/flights">Flights List</Link>
+        <Link to="/profile">Profile</Link>
+
+
 
         {user ? (
           <>
