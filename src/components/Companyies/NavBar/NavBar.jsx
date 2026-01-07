@@ -8,7 +8,7 @@ const NavBar = ({ user, handleLogout }) => {
 
 <Link to="/"><img src={logo} alt="Sifraty Logo" /></Link>
 
-      <h2 style={styles.logo}>Sifraty</h2>
+      <h2 style={styles.logo}>Safraty</h2>
 
       <div style={styles.links}>
         <Link to="/">Home</Link>

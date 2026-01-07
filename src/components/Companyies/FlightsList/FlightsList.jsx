@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { getCompany } from "../../../services/CompanyiesAuthService";
 import { FaPlaneDeparture, FaPlaneArrival, FaMoneyBillWave, FaHashtag, FaSuitcase, FaWifi, FaCity } from "react-icons/fa";
 
@@ -8,7 +9,12 @@ export default function FlightsList({ flights, handleSelect, handleDelete }) {
   if (flights.length === 0) return <p>No flights available.</p>;
 
   return (
+
+
     <>
+
+      <Link to='/'><h2>→ Back</h2></Link>
+
       <h2>Airline: {company?.name}</h2>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>

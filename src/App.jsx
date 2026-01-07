@@ -90,6 +90,16 @@ const handleSelectFlight = (flight) => {
     setFlights(flights.filter(f => f.id !== id))
   }
 
+  const handleProfileUpdate = async (formData) => {
+  try {
+    const updatedCompany = await authService.updateProfile(formData);
+    setUser(prev => ({ ...prev, ...updatedCompany })); 
+  } catch (err) {
+    console.error("Update failed:", err);
+  }
+};
+
+
 
   return (
     <>
@@ -146,7 +156,11 @@ const handleSelectFlight = (flight) => {
           }
         />
 
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile 
+        user={user}
+        handleProfileUpdate={handleProfileUpdate}
+        
+        />} />
 
 
         <Route path="*" element={<h1>404 Page Not Found, Plase Try agein</h1>} />

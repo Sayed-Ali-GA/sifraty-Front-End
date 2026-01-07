@@ -54,6 +54,34 @@ const signIn = async (formData) => {
   }
 }
 
+
+const updateProfile = async (formData) => {
+  try {
+    const token = localStorage.getItem('token'); 
+    if (!token) throw new Error("Not logged in");
+
+    const res = await fetch(`${BASE_URL}/airlines/profile`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.err || 'Update failed');
+
+    const currentToken = token.split('.');
+    const payload = { ...getCompany(), ...data }; 
+
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+
 const getCompany = () => {
   const token = localStorage.getItem('token')
   return token ? JSON.parse(atob(token.split('.')[1])) : null
@@ -62,6 +90,7 @@ const getCompany = () => {
 export { 
   signUp,
   signIn,
-  getCompany
+  getCompany,
+  updateProfile
 
 }
