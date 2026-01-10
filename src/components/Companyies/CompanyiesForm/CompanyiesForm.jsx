@@ -12,7 +12,18 @@ import {
   FaWifi 
 } from "react-icons/fa";
 
-const CompanyiesForm = ({ flights, handleAddFlight, handleUpdateFlight }) => {
+
+const FieldWrapper = ({ icon, label, children }) => (
+  <div style={{ display: "flex", flexDirection: "column", marginBottom: "12px" }}>
+    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 500 }}>
+      {icon} {label}
+    </label>
+    {children}
+  </div>
+);
+
+
+const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -27,7 +38,7 @@ const CompanyiesForm = ({ flights, handleAddFlight, handleUpdateFlight }) => {
     arrival: "",
     price: "",
     flightNumber: "",
-    baggage: 0,
+    baggage: "",
     wifi: false
   };
 
@@ -36,68 +47,72 @@ const CompanyiesForm = ({ flights, handleAddFlight, handleUpdateFlight }) => {
   const [fromCities, setFromCities] = useState([]);
   const [toCities, setToCities] = useState([]);
 
+
   useEffect(() => {
     fetch("https://countriesnow.space/api/v0.1/countries")
       .then(res => res.json())
       .then(data => setCountries(data.data))
-      .catch(err => console.error(err));
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
-    if (selectedFlight) {
-      setFormData({
-        fromCountry: selectedFlight.from_country || "",
-        toCountry: selectedFlight.to_country || "",
-        fromCity: selectedFlight.from_city || "",
-        toCity: selectedFlight.to_city || "",
-        departure: selectedFlight.departure_time || "",
-        arrival: selectedFlight.arrival_time || "",
-        price: selectedFlight.price || "",
-        flightNumber: selectedFlight.flight_number || "",
-        baggage: selectedFlight.baggage || 0,
-        wifi: selectedFlight.wifi || false
-      });
-
-      if (selectedFlight.from_country) fetchCities(selectedFlight.from_country, "from");
-      if (selectedFlight.to_country) fetchCities(selectedFlight.to_country, "to");
-    } else {
+    if (!selectedFlight) {
       setFormData(initialState);
+      return;
     }
+
+    const {
+      from_country, to_country, from_city, to_city,
+      departure_time, arrival_time, price,
+      flight_number, baggage, wifi
+    } = selectedFlight;
+
+    setFormData({
+      fromCountry: from_country || "",
+      toCountry: to_country || "",
+      fromCity: from_city || "",
+      toCity: to_city || "",
+      departure: departure_time || "",
+      arrival: arrival_time || "",
+      price: price?.toString() || "",
+      flightNumber: flight_number || "",
+      baggage: baggage?.toString() || "",
+      wifi: wifi || false
+    });
+
+    if (from_country) fetchCities(from_country, "from");
+    if (to_country) fetchCities(to_country, "to");
   }, [selectedFlight]);
 
+ 
   const fetchCities = async (country, type) => {
     if (!country) return;
     try {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/cities",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country })
-        }
-      );
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries/cities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country })
+      });
       const data = await res.json();
-      if (type === "from") setFromCities(data.data);
-      else setToCities(data.data);
+      if (type === "from") setFromCities(data.data || []);
+      else setToCities(data.data || []);
     } catch (err) {
       console.error(err);
     }
   };
 
+
   const countryOptions = countries.map(c => ({ value: c.country, label: c.country }));
-  const cityOptions = (cities) => cities.map(c => ({ value: c, label: c }));
+  const cityOptions = (cities) => (cities || []).map(c => ({ value: c, label: c }));
+
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value
-    });
+    setFormData(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const submitData = {
       from_country: formData.fromCountry,
       to_country: formData.toCountry,
@@ -123,6 +138,7 @@ const CompanyiesForm = ({ flights, handleAddFlight, handleUpdateFlight }) => {
     }
   };
 
+
   const selectStyles = {
     control: (provided) => ({
       ...provided,
@@ -141,104 +157,144 @@ const CompanyiesForm = ({ flights, handleAddFlight, handleUpdateFlight }) => {
     })
   };
 
-
-  const FieldWrapper = ({ icon, label, children }) => (
-    <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "500" }}>
-        {icon} {label}
-      </label>
-      {children}
-    </div>
-  );
-
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "20px auto" }}>
-      <h2>{selectedFlight ? "Edit Flight" : "Add New Flight"}</h2>
+    <form onSubmit={handleSubmit} style={{ maxWidth: 500, margin: "20px auto" }}>
+      <h2 style={{ marginBottom: "20px" }}>
+        {selectedFlight ? "Edit Company Flight" : "Add New Company Flight"}
+      </h2>
 
-      <FieldWrapper icon={<FaGlobe style={{ color: "black" }} />} label="From Country">
+      <FieldWrapper icon={<FaGlobe />} label="From Country">
         <Select
           placeholder="Select Country"
           isSearchable
           options={countryOptions}
           value={countryOptions.find(c => c.value === formData.fromCountry) || null}
           onChange={(opt) => {
-            setFormData({ ...formData, fromCountry: opt.value, fromCity: "" });
+            setFormData(prev => ({ ...prev, fromCountry: opt.value, fromCity: "" }));
             fetchCities(opt.value, "from");
           }}
           styles={selectStyles}
         />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaCity style={{ color: "black" }} />} label="From City">
+      <FieldWrapper icon={<FaCity />} label="From City">
         <Select
           placeholder="Select City"
           isSearchable
           options={cityOptions(fromCities)}
           value={cityOptions(fromCities).find(c => c.value === formData.fromCity) || null}
-          onChange={(opt) => setFormData({ ...formData, fromCity: opt.value })}
+          onChange={(opt) => setFormData(prev => ({ ...prev, fromCity: opt.value }))}
           styles={selectStyles}
         />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaGlobe style={{ color: "black" }} />} label="To Country">
+
+      <FieldWrapper icon={<FaGlobe />} label="To Country">
         <Select
           placeholder="Select Country"
           isSearchable
           options={countryOptions}
           value={countryOptions.find(c => c.value === formData.toCountry) || null}
           onChange={(opt) => {
-            setFormData({ ...formData, toCountry: opt.value, toCity: "" });
+            setFormData(prev => ({ ...prev, toCountry: opt.value, toCity: "" }));
             fetchCities(opt.value, "to");
           }}
           styles={selectStyles}
         />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaCity style={{ color: "black" }} />} label="To City">
+      <FieldWrapper icon={<FaCity />} label="To City">
         <Select
           placeholder="Select City"
           isSearchable
           options={cityOptions(toCities)}
           value={cityOptions(toCities).find(c => c.value === formData.toCity) || null}
-          onChange={(opt) => setFormData({ ...formData, toCity: opt.value })}
+          onChange={(opt) => setFormData(prev => ({ ...prev, toCity: opt.value }))}
           styles={selectStyles}
         />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaPlaneDeparture style={{ color: "black" }} />} label="Departure">
-        <input type="datetime-local" name="departure" value={formData.departure} onChange={handleChange} required
-          style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #4f46e5" }} />
+
+      <FieldWrapper icon={<FaPlaneDeparture />} label="Departure">
+        <input
+          type="datetime-local"
+          name="departure"
+          value={formData.departure}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
+        />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaPlaneArrival style={{ color: "black" }} />} label="Arrival">
-        <input type="datetime-local" name="arrival" value={formData.arrival} onChange={handleChange} required
-          style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #4f46e5" }} />
+      <FieldWrapper icon={<FaPlaneArrival />} label="Arrival">
+        <input
+          type="datetime-local"
+          name="arrival"
+          value={formData.arrival}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
+        />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaMoneyBillWave style={{ color: "black" }} />} label="Price (BHD)">
-        <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price BHD" required
-          style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #4f46e5" }} />
+
+      <FieldWrapper icon={<FaMoneyBillWave />} label="Price (BHD)">
+        <input
+          type="text"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          placeholder="Price BHD"
+          required
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
+        />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaHashtag style={{ color: "black" }} />} label="Flight Number">
-        <input type="text" name="flightNumber" value={formData.flightNumber} onChange={handleChange} placeholder="Flight Number" required
-          style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #4f46e5" }} />
+      <FieldWrapper icon={<FaHashtag />} label="Flight Number">
+        <input
+          type="text"
+          name="flightNumber"
+          value={formData.flightNumber}
+          onChange={handleChange}
+          placeholder="Flight Number"
+          required
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
+        />
       </FieldWrapper>
 
-      <FieldWrapper icon={<FaSuitcase style={{ color: "black" }} />} label="Baggage (kg)">
-        <input type="number" name="baggage" value={formData.baggage} onChange={handleChange} min={0}
-          style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #4f46e5" }} />
+      <FieldWrapper icon={<FaSuitcase />} label="Baggage (kg)">
+        <input
+          type="text"
+          name="baggage"
+          value={formData.baggage}
+          onChange={handleChange}
+          placeholder="Baggage kg"
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
+        />
       </FieldWrapper>
 
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px", cursor: "pointer" }}
-        onClick={() => setFormData({ ...formData, wifi: !formData.wifi })}>
-        <FaWifi style={{ marginRight: "8px", color: formData.wifi ? "#4f46e5" : "#ccc" }} />
-        <span style={{ fontWeight: "500" }}>Wi-Fi Available</span>
-      </div>
+      <FieldWrapper icon={<FaWifi />} label="Wi-Fi Available">
+        <input
+          type="checkbox"
+          name="wifi"
+          checked={formData.wifi}
+          onChange={handleChange}
+        />
+      </FieldWrapper>
 
-      <button type="submit"
-        style={{ width: "100%", padding: "10px", backgroundColor: "#4f46e5", color: "#fff", borderRadius: "8px", border: "none" }}>
-        {selectedFlight ? "Update Flight" : "Add Flight"}
+      <button
+        type="submit"
+        style={{
+          width: "100%",
+          padding: 10,
+          backgroundColor: "#4f46e5",
+          color: "#fff",
+          borderRadius: 8,
+          border: "none",
+          marginTop: 10
+        }}
+      >
+        {selectedFlight ? "Update Company Flight" : "Add Company Flight"}
       </button>
     </form>
   );

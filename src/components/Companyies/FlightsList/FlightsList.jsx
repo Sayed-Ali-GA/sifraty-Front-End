@@ -1,20 +1,24 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { getCompany } from "../../../services/CompanyiesAuthService";
-import { FaPlaneDeparture, FaPlaneArrival, FaMoneyBillWave, FaHashtag, FaSuitcase, FaWifi, FaCity } from "react-icons/fa";
+import {
+  FaPlaneDeparture,
+  FaPlaneArrival,
+  FaMoneyBillWave,
+  FaHashtag,
+  FaSuitcase,
+  FaWifi,
+  FaCity,
+} from "react-icons/fa";
 
-export default function FlightsList({ flights, handleSelect, handleDelete }) {
+export default function FlightsListCompanyies({ flights, handleDelete }) {
   const company = getCompany();
 
   if (!flights) return <p>Loading flights...</p>;
   if (flights.length === 0) return <p>No flights available.</p>;
 
   return (
-
-
     <>
-
-      <Link to='/'><h2>→ Back</h2></Link>
-
+      <Link to="/"><h2>← Back</h2></Link>
       <h2>Airline: {company?.name}</h2>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
@@ -30,50 +34,47 @@ export default function FlightsList({ flights, handleSelect, handleDelete }) {
             }}
           >
             <h3>
-              <FaCity style={{ marginRight: "5px", color: "black" }} />
-              {flight.from_city} → {flight.to_city}
+              <FaCity /> {flight.from_city} → {flight.to_city}
             </h3>
 
             <p>
-              <FaPlaneDeparture style={{ marginRight: "5px", color: "black" }} />
-              <strong>Departure:</strong>{" "}
+              <FaPlaneDeparture />{" "}
               {new Date(flight.departure_time).toLocaleString()}
             </p>
 
             <p>
-              <FaPlaneArrival style={{ marginRight: "5px", color: "black" }} />
-              <strong>Arrival:</strong>{" "}
+              <FaPlaneArrival />{" "}
               {new Date(flight.arrival_time).toLocaleString()}
             </p>
 
             <p>
-              <FaMoneyBillWave style={{ marginRight: "5px", color: "black" }} />
-              <strong>Price:</strong> {flight.price} BHD
+              <FaMoneyBillWave /> {flight.price} BHD
             </p>
 
             <p>
-              <FaHashtag style={{ marginRight: "5px", color: "black" }} />
-              <strong>Flight Number:</strong> {flight.flight_number}
+              <FaHashtag /> {flight.flight_number}
             </p>
 
             <p>
-              <FaSuitcase style={{ marginRight: "5px", color: "black" }} />
-              <strong>Baggage:</strong> {flight.baggage || 0} kg
+              <FaSuitcase /> {flight.baggage || 0} kg
             </p>
 
             <p>
-              <FaWifi style={{ marginRight: "5px", color: "black" }} />
-              <strong>Wifi:</strong> {flight.wifi ? "Yes" : "No"}
-            </p>
-
-            <p>
-              Posted by: <strong>{company?.employee_username}</strong>
+              <FaWifi /> {flight.wifi ? "Yes" : "No"}
             </p>
 
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <button style={{ flex: 1 }} onClick={() => handleSelect(flight)}>
-                Edit
-              </button>
+              
+
+              <Link
+                to={`/flights/edit/${flight.id}`}
+                style={{ flex: 1 }}
+              >
+                <button style={{ width: "100%" }}>
+                  Edit
+                </button>
+              </Link>
+
 
               <button
                 style={{ flex: 1, background: "crimson", color: "white" }}
@@ -81,6 +82,7 @@ export default function FlightsList({ flights, handleSelect, handleDelete }) {
               >
                 Delete
               </button>
+
             </div>
           </div>
         ))}

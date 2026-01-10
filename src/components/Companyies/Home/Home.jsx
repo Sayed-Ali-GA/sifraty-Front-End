@@ -1,38 +1,50 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-const Home = ({ user }) => {
-
-
+const HomeCompanyies = ({ company }) => {
   return (
-    <main>
-      {user ? (
+    <main style={{ padding: "20px" }}>
+      {company ? (
         <>
-          <h1>Welcome, {user.employee_username}</h1>
+          <h1>Welcome, {company.name || "Your Company"}</h1>
+          <p>Manage your flights and post new trips for travelers.</p>
 
-               
-              <p>  <span>{user.name} </span> 
-                 ,Thank you to use our website to post your flights, Lets people try
-                nice airplane  to travel world. 
-              </p>
+
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <Link to="/flights/new">
+              <button style={{
+                padding: "10px 15px",
+                borderRadius: "8px",
+                backgroundColor: "#4f46e5",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}>
+                Post new Flight +
+              </button>
+            </Link>
+
+            <Link to="/flights">
+              <button style={{
+                padding: "10px 15px",
+                borderRadius: "8px",
+                backgroundColor: "#6b7280",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}>
+                Browse Flights
+              </button>
+            </Link>
+          </div>
         </>
       ) : (
         <>
-        
-          <h1>Welcome to Sifraty App, Where's to found your trip</h1>
-          <p>Please sign in or create an account.</p>
-
-          
-
+          <h1>Welcome to Sifraty App</h1>
+          <p>Please sign in or create a company account to manage flights.</p>
         </>
-        
       )}
-         <Link to={'/flights/new'}> <button>Post new Flight +</button></Link>
-         <Link to={'/flights'}> <button>Browes your Flight</button></Link>
     </main>
-    
-  )
-  
-}
+  );
+};
 
-
-export default Home
+export default HomeCompanyies;

@@ -1,86 +1,52 @@
-// import { getCompany } from "../../../services/CompanyiesAuthService";
-// import { useNavigate } from "react-router-dom";
-
-// export default function Profile() {
-//   const company = getCompany();
-//   const navigate = useNavigate();
-
-  
-//   if (!company) {
-//     navigate("/sign-in");
-//     return null;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Company Profile</h1>
-
-//       <h2>{company.logo}</h2>
-
-//       <div>
-//         <p><strong>Company:</strong> {company.name}</p>
-//         <p><strong>Employee Username:</strong> {company.employee_username} </p>
-//         <p><strong>Email:</strong> {company.email}</p>
-//         <p><strong>Phone Number:</strong> {company.phone}</p>
-
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
 import { useState, useEffect } from "react";
-import { getCompany, updateProfile } from "../../../services/CompanyiesAuthService";
 import { useNavigate } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 
-export default function Profile() {
+export default function ProfileCompany({ company, handleProfileUpdate }) {
   const navigate = useNavigate();
-  const companyData = getCompany();
-
   const [form, setForm] = useState({
-    name: companyData?.name || "",
-    email: companyData?.email || "",
-    phone: companyData?.phone || "",
-    license: companyData?.license || "",
-    logo: companyData?.logo || "",
+    name: "",
+    employee_username: "",
+    email: "",
+    phone: "",
+    license: "",
+    logo: "",
   });
 
+  const [editingField, setEditingField] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [editMode, setEditMode] = useState(false);
 
+  // Initialize form
   useEffect(() => {
-    if (!companyData) {
+    if (!company) {
       navigate("/sign-in");
+      return;
     }
-  }, [companyData, navigate]);
+
+    setForm({
+      name: company.name || "",
+      employee_username: company.employee_username || "",
+      email: company.email || "",
+      phone: company.phone || "",
+      license: company.license || "",
+      logo: company.logo || "",
+    });
+  }, [company, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const saveField = async (field) => {
     setLoading(true);
     setMessage("");
 
     try {
-      const updated = await updateProfile(form);
-      setForm(updated);
-
-      const oldToken = localStorage.getItem("token");
-      if (oldToken) {
-        const payload = { ...JSON.parse(atob(oldToken.split(".")[1])), ...updated };
-        const newToken = [oldToken.split(".")[0], btoa(JSON.stringify(payload)), oldToken.split(".")[2]].join(".");
-        localStorage.setItem("token", newToken);
-      }
-
-      setMessage("Profile updated successfully!");
-      setEditMode(false);
+      await handleProfileUpdate(form);
+      setMessage(`${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully. Please log out and log back in to see full updates.`);
+      setEditingField(null);
     } catch (err) {
       setMessage(err.message || "Something went wrong");
     } finally {
@@ -88,75 +54,67 @@ export default function Profile() {
     }
   };
 
+  const cancelEdit = () => {
+    setForm({
+      name: company.name || "",
+      employee_username: company.employee_username || "",
+      email: company.email || "",
+      phone: company.phone || "",
+      license: company.license || "",
+      logo: company.logo || "",
+    });
+    setEditingField(null);
+    setMessage("");
+  };
+
+  const fields = ["name", "employee_username", "email", "phone", "license", "logo"];
+
   return (
-    <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center" }}>Company Profile</h1>
+    <div style={{ maxWidth: "500px", margin: "20px auto", fontFamily: "Arial, sans-serif" }}>
+      <h1>Company Profile</h1>
+
+     
 
       {form.logo && (
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <img src={form.logo} alt="Company Logo" style={{ width: "150px", borderRadius: "8px" }} />
+        <div style={{ marginBottom: "20px" }}>
+          <img src={form.logo} alt="Company Logo" width="150" />
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        {["name", "email", "phone", "license", "logo"].map((field) => (
-          <div
-            key={field}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "15px",
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-            }}
-          >
-            <label style={{ fontWeight: "bold", marginRight: "10px", minWidth: "100px" }}>
-              {field.charAt(0).toUpperCase() + field.slice(1)}:
-            </label>
+      {fields.map(field => (
+        <div key={field} style={{ marginBottom: "15px" }}>
+          <label style={{ display: "block", fontWeight: "bold" }}>
+            {field.charAt(0).toUpperCase() + field.slice(1)}:
+          </label>
 
-            {editMode ? (
+          {editingField === field ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
               <input
+                type={field === "email" ? "email" : "text"}
                 name={field}
                 value={form[field]}
                 onChange={handleChange}
                 style={{ flex: 1, padding: "5px" }}
               />
-            ) : (
+              <button type="button" onClick={() => saveField(field)} disabled={loading} title="Save">
+                <FaSave />
+              </button>
+              <button type="button" onClick={cancelEdit} title="Cancel">
+                <FaTimes />
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
               <span style={{ flex: 1 }}>{form[field]}</span>
-            )}
+              <button type="button" onClick={() => setEditingField(field)} title="Edit">
+                <FaEdit />
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
 
-            {!editMode && (
-              <FaEdit
-                style={{ cursor: "pointer", marginLeft: "10px" }}
-                onClick={() => setEditMode(true)}
-              />
-            )}
-          </div>
-        ))}
-
-        {editMode && (
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: "#4CAF50",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              {loading ? "Updating..." : "Update Profile"}
-            </button>
-          </div>
-        )}
-      </form>
-
-      {message && <p style={{ textAlign: "center", marginTop: "15px", color: "green" }}>{message}</p>}
+      {message && <p style={{ color: "green", fontWeight: "bold" }}>{message}</p>}
     </div>
   );
 }

@@ -1,31 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import logo from '../../../assets/Logo-sifraty.png';
 
-
-const NavBar = ({ user, handleLogout }) => {
+const NavBarCompanyies = ({ company, handleLogout }) => {
   return (
-    <nav style={styles.nav}>
-
-<Link to="/"><img src={logo} alt="Sifraty Logo" /></Link>
-
-      <h2 style={styles.logo}>Safraty</h2>
-
-      <div style={styles.links}>
-        <Link to="/">Home</Link>
-        <Link to="/flights/new">Flights Form</Link>
-        <Link to="/flights">Flights List</Link>
-        <Link to="/profile">Profile</Link>
-
-
-
-        {user ? (
+    <nav style={{ padding: '10px 20px', background: '#222', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Link to="/"><img src={logo} alt="Sifraty Logo" /></Link>
+      <div>
+        {company ? (
           <>
-            <span>Hello, {user.employee_username}</span>
+            <Link to="/flights" style={{ marginRight: '10px' }}>Flights</Link>
+            <Link to="/flights/new" style={{ marginRight: '10px' }}>Add Flight</Link>
+            <Link to="/profile" style={{ marginRight: '10px' }}>Profile</Link>
             <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <Link to="/sign-in">Sign In</Link>
+            <Link to="/sign-in" style={{ marginRight: '10px' }}>Sign In</Link>
             <Link to="/sign-up">Sign Up</Link>
           </>
         )}
@@ -34,23 +24,4 @@ const NavBar = ({ user, handleLogout }) => {
   )
 }
 
-const styles = {
-  nav: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '10px 20px',
-    background: '#222',
-    color: '#fff',
-  },
-  logo: {
-    margin: 0,
-  },
-  links: {
-    display: 'flex',
-    gap: '15px',
-    alignItems: 'center',
-  },
-}
-
-export default NavBar
+export default NavBarCompanyies;
