@@ -2,7 +2,11 @@ const BASE_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/flights`;
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
-  return { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
+  if (!token) throw new Error("No auth token found in localStorage");
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  };
 };
 
 const index = async () => {
@@ -59,11 +63,23 @@ const deleteFlight = async (flightId) => {
   } catch (err) { console.error(err); }
 };
 
+const allFlights = async () => {
+  try {
+    const res = await fetch(BASE_URL); // GET /api/flights
+    if (!res.ok) throw new Error("Failed to fetch all flights");
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
 export { 
   index, 
   myFlights, 
   show, 
   create, 
   update, 
-  deleteFlight 
+  deleteFlight,
+  allFlights
 };
