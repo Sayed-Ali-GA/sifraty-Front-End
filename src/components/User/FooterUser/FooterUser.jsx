@@ -38,7 +38,7 @@ function FooterUser({ user }) {
       <hr className="footer-hr" style={{ borderColor: '#444', marginBottom: '1rem' }} />
 
 
-      <p className="footer-copy" style={{ fontSize: '0.9rem' }}>© {year} <strong>Sifraty</strong>. All rights reserved.</p>
+      <p className="footer-copy" style={{ fontSize: '0.9rem' }}>© {year} <strong>Sfraty</strong>. All rights reserved.</p>
     </footer>
   );
 }
