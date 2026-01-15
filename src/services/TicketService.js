@@ -26,6 +26,7 @@ const myFlights = async () => {
 
 const show = async (flightId) => {
   try {
+        console.log("flightId:", flightId);
     const res = await fetch(`${BASE_URL}/${flightId}`, { headers: getAuthHeaders() });
     return await res.json();
   } catch (err) { console.error(err); }

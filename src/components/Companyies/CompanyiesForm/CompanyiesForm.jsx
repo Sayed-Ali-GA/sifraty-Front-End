@@ -49,11 +49,15 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
 
 
   useEffect(() => {
-    fetch("https://countriesnow.space/api/v0.1/countries")
-      .then(res => res.json())
-      .then(data => setCountries(data.data))
-      .catch(console.error);
-  }, []);
+  fetch("https://countriesnow.space/api/v0.1/countries")
+    .then(res => res.json())
+    .then(data => {
+      const filteredCountries = (data.data || []).filter(c => c.country !== "Israel");
+      setCountries(filteredCountries);
+    })
+    .catch(console.error);
+}, []);
+
 
   useEffect(() => {
     if (!selectedFlight) {
@@ -87,6 +91,7 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
  
   const fetchCities = async (country, type) => {
     if (!country) return;
+    if (!country || country === "Israel") return
     try {
       const res = await fetch("https://countriesnow.space/api/v0.1/countries/cities", {
         method: "POST",

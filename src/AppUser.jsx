@@ -14,6 +14,7 @@ import HomeUser from "./components/User/HomeUser/HomeUser";
 import UserSignUp from "./components/User/SignUpUser/SignUpUser";
 import UserSignIn from "./components/User/SignInUser/SignInUser";
 import UserFlights from './components/User/Flights/Flights'
+import FlightDetails from "./components/User/FlightDetails/FlightDetails";
 
 
 
@@ -96,6 +97,14 @@ function AppUser() {
          path="/user/flights" 
          element={<UserFlights 
           user={user}/>} 
+          
+          />
+
+
+          <Route
+          path="/user/flights/:flightId"
+          element={<FlightDetails user={user} flights={flights}      />}
+          
           
           />
 
