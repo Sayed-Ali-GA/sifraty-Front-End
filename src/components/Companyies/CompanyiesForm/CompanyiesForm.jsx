@@ -12,7 +12,6 @@ import {
   FaWifi 
 } from "react-icons/fa";
 
-
 const FieldWrapper = ({ icon, label, children }) => (
   <div style={{ display: "flex", flexDirection: "column", marginBottom: "12px" }}>
     <label style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 500 }}>
@@ -21,7 +20,6 @@ const FieldWrapper = ({ icon, label, children }) => (
     {children}
   </div>
 );
-
 
 const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) => {
   const navigate = useNavigate();
@@ -39,7 +37,8 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
     price: "",
     flightNumber: "",
     baggage: "",
-    wifi: false
+    wifi: false,
+    seatsAvailable: ""
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -49,14 +48,14 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
 
 
   useEffect(() => {
-  fetch("https://countriesnow.space/api/v0.1/countries")
-    .then(res => res.json())
-    .then(data => {
-      const filteredCountries = (data.data || []).filter(c => c.country !== "Israel");
-      setCountries(filteredCountries);
-    })
-    .catch(console.error);
-}, []);
+    fetch("https://countriesnow.space/api/v0.1/countries")
+      .then(res => res.json())
+      .then(data => {
+        const filteredCountries = (data.data || []).filter(c => c.country !== "Israel");
+        setCountries(filteredCountries);
+      })
+      .catch(console.error);
+  }, []);
 
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
     const {
       from_country, to_country, from_city, to_city,
       departure_time, arrival_time, price,
-      flight_number, baggage, wifi
+      flight_number, baggage, wifi, seats_available
     } = selectedFlight;
 
     setFormData({
@@ -81,17 +80,17 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
       price: price?.toString() || "",
       flightNumber: flight_number || "",
       baggage: baggage?.toString() || "",
-      wifi: wifi || false
+      wifi: wifi || false,
+      seatsAvailable: seats_available?.toString() || ""
     });
 
     if (from_country) fetchCities(from_country, "from");
     if (to_country) fetchCities(to_country, "to");
   }, [selectedFlight]);
 
- 
+
   const fetchCities = async (country, type) => {
-    if (!country) return;
-    if (!country || country === "Israel") return
+    if (!country || country === "Israel") return;
     try {
       const res = await fetch("https://countriesnow.space/api/v0.1/countries/cities", {
         method: "POST",
@@ -106,10 +105,8 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
     }
   };
 
-
   const countryOptions = countries.map(c => ({ value: c.country, label: c.country }));
   const cityOptions = (cities) => (cities || []).map(c => ({ value: c, label: c }));
-
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
@@ -128,7 +125,8 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
       price: parseFloat(formData.price),
       flight_number: formData.flightNumber,
       baggage: parseInt(formData.baggage),
-      wifi: formData.wifi
+      wifi: formData.wifi,
+      seats_available: Number(formData.seatsAvailable)
     };
 
     try {
@@ -142,7 +140,6 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
       console.error(err);
     }
   };
-
 
   const selectStyles = {
     control: (provided) => ({
@@ -193,7 +190,6 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
         />
       </FieldWrapper>
 
-
       <FieldWrapper icon={<FaGlobe />} label="To Country">
         <Select
           placeholder="Select Country"
@@ -219,7 +215,6 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
         />
       </FieldWrapper>
 
-
       <FieldWrapper icon={<FaPlaneDeparture />} label="Departure">
         <input
           type="datetime-local"
@@ -241,7 +236,6 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
           style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
         />
       </FieldWrapper>
-
 
       <FieldWrapper icon={<FaMoneyBillWave />} label="Price (BHD)">
         <input
@@ -284,6 +278,19 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
           name="wifi"
           checked={formData.wifi}
           onChange={handleChange}
+        />
+      </FieldWrapper>
+
+      <FieldWrapper icon={<FaHashtag />} label="Seats Available">
+        <input
+          type="number"
+          name="seatsAvailable"
+          value={formData.seatsAvailable || ""}
+          onChange={handleChange}
+          placeholder="Number of seats"
+          required
+          min={0}
+          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
         />
       </FieldWrapper>
 

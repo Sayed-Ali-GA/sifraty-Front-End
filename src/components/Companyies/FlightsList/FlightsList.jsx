@@ -8,6 +8,7 @@ import {
   FaSuitcase,
   FaWifi,
   FaCity,
+  FaChair,
 } from "react-icons/fa";
 
 export default function FlightsListCompanyies({ flights, handleDelete }) {
@@ -31,50 +32,54 @@ export default function FlightsListCompanyies({ flights, handleDelete }) {
               padding: "15px",
               width: "250px",
               boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
           >
-            <h3>
-              <FaCity /> {flight.from_city} → {flight.to_city}
-            </h3>
+            <div>
+              <h3>
+                <FaCity /> {flight.from_city} → {flight.to_city}
+              </h3>
 
-            <p>
-              <FaPlaneDeparture />{" "}
-              {new Date(flight.departure_time).toLocaleString()}
-            </p>
+              <p>
+                <FaPlaneDeparture /> {new Date(flight.departure_time).toLocaleString()}
+              </p>
 
-            <p>
-              <FaPlaneArrival />{" "}
-              {new Date(flight.arrival_time).toLocaleString()}
-            </p>
+              <p>
+                <FaPlaneArrival /> {new Date(flight.arrival_time).toLocaleString()}
+              </p>
 
-            <p>
-              <FaMoneyBillWave /> {flight.price} BHD
-            </p>
+              <p>
+                <FaMoneyBillWave /> {flight.price} BHD
+              </p>
 
-            <p>
-              <FaHashtag /> {flight.flight_number}
-            </p>
+              <p>
+                <FaHashtag /> {flight.flight_number}
+              </p>
 
-            <p>
-              <FaSuitcase /> {flight.baggage || 0} kg
-            </p>
+              <p>
+                <FaSuitcase /> {flight.baggage || 0} kg
+              </p>
 
-            <p>
-              <FaWifi /> {flight.wifi ? "Yes" : "No"}
-            </p>
+              <p>
+                <FaWifi /> {flight.wifi ? "Yes" : "No"}
+              </p>
+
+              <p>
+                <FaChair /> {flight.seats_available} seats available
+              </p>
+
+                    <br />
+                    <p>Posted By: <strong>{company?.employee_username || "Unknown"}</strong></p>
+
+
+            </div>
 
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              
-
-              <Link
-                to={`/flights/edit/${flight.id}`}
-                style={{ flex: 1 }}
-              >
-                <button style={{ width: "100%" }}>
-                  Edit
-                </button>
+              <Link to={`/flights/edit/${flight.id}`} style={{ flex: 1 }}>
+                <button style={{ width: "100%" }}>Edit</button>
               </Link>
-
 
               <button
                 style={{ flex: 1, background: "crimson", color: "white" }}
@@ -82,7 +87,6 @@ export default function FlightsListCompanyies({ flights, handleDelete }) {
               >
                 Delete
               </button>
-
             </div>
           </div>
         ))}
