@@ -15,6 +15,7 @@ import UserSignUp from "./components/User/SignUpUser/SignUpUser";
 import UserSignIn from "./components/User/SignInUser/SignInUser";
 import UserFlights from './components/User/Flights/Flights'
 import FlightDetails from "./components/User/FlightDetails/FlightDetails";
+import BookingsPage from './components/User/BookingsPage/BookingsPage'
 
 
 
@@ -101,12 +102,24 @@ function AppUser() {
           />
 
 
-          <Route
-          path="/user/flights/:flightId"
-          element={<FlightDetails user={user} flights={flights}      />}
+        <Route
+            path="/user/flights/:flightId"
+            element={<FlightDetails 
+            user={user} 
+            flights={flights}    
+          />}
           
           
           />
+
+          <Route 
+            path="/user/flights/:flightId/bookings" 
+            element={<BookingsPage  
+            user={user} 
+            flights={flights} 
+            />}
+
+      />
 
        
 
