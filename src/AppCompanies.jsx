@@ -14,6 +14,7 @@ import SignIn from "./components/Companyies/SignIn/SignIn";
 import FlightsList from "./components/Companyies/FlightsList/FlightsList";
 import FlightForm from "./components/Companyies/CompanyiesForm/CompanyiesForm";
 import ProfileCompany from "./components/Companyies/Profile/Profile";
+import CompFlightsDetails from './components/Companyies/CompFlightsDetails/CompFlightsDetails'
 
 function AppCompanies() {
   const navigate = useNavigate();
@@ -121,6 +122,7 @@ function AppCompanies() {
           element={<FlightsList flights={flights} handleDelete={handleDeleteFlight} handleUpdateFlight={handleUpdateFlight} />}
         />
         <Route path="/flights/new" element={<FlightForm flights={flights} handleAddFlight={handleCreateFlight} />} />
+
         <Route 
           path="/flights/edit/:id" 
           element={flights.length > 0 ? (
@@ -129,6 +131,16 @@ function AppCompanies() {
             <p>Loading flights...</p>
           )}
         />
+
+      <Route 
+        path="/flights/:flightId" 
+        element={<CompFlightsDetails
+        flights={flights}
+        company={company} 
+          />} 
+      />
+
+
       </Routes>
 
       <CompanyFooter company={company} />
