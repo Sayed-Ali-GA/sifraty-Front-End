@@ -5,6 +5,21 @@ const getAuthHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("token")}`
 });
 
+// دالة لجلب حجوزات الرحلة للشركة
+export const getByFlightId = async (flightId) => {
+  const res = await fetch(`${BASE_URL}/company/bookings?flightId=${flightId}`, {
+    headers: getAuthHeaders()
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'Failed to fetch bookings for this flight');
+  }
+
+  return res.json();
+};
+
+// الدوال الأخرى
 export const bookFlight = async (flightId, bookingData) => {
   const res = await fetch(`${BASE_URL}/${flightId}`, {
     method: "POST",
@@ -19,7 +34,6 @@ export const bookFlight = async (flightId, bookingData) => {
 
   return res.json();
 };
-
 
 export const myBookings = async () => {
   const res = await fetch(`${BASE_URL}/my-bookings`, {

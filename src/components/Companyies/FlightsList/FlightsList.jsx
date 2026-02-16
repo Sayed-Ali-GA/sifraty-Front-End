@@ -76,6 +76,10 @@ export default function FlightsListCompanyies({ flights, handleDelete }) {
 
             </div>
 
+            <Link to={`/flights/${flight.id}`} style={{ flex: 1 }}>
+                <button style={{ width: "100%" }}>View</button>
+            </Link>
+
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               <Link to={`/flights/edit/${flight.id}`} style={{ flex: 1 }}>
                 <button style={{ width: "100%" }}>Edit</button>
