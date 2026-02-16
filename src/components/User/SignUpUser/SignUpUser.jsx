@@ -10,7 +10,7 @@ const UserSignUp = ({ UserHandleSignUp, user }) => {
     password: '',
     passwordConf: '',
     email: '',
-    logo: ''
+    photo: null
   });
 
   const [error, setError] = useState(null);
@@ -57,19 +57,28 @@ const UserSignUp = ({ UserHandleSignUp, user }) => {
         onSubmit={handleSubmit}
         style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
       >
-        {["username", "password", "passwordConf", "email", "logo"].map(field => (
+        {["username", "password", "passwordConf", "email", "photo"].map(field => (
           <input
             key={field}
-            type={field.toLowerCase().includes("password") ? "password" : "text"}
+            type={
+              field === "photo" ? "file" :
+              field.toLowerCase().includes("password") ? "password" : "text"
+            }
             name={field}
             placeholder={field
               .replace(/_/g, " ")
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, str => str.toUpperCase())
             }
-            value={formData[field]}
-            onChange={handleChange}
-            required={field !== "logo"} // logo is optional
+            value={field === "photo" ? undefined : formData[field]} 
+            onChange={(e) => {
+              if (field === "photo") {
+                setFormData(prev => ({ ...prev, photo: e.target.files[0] }));
+              } else {
+                handleChange(e);
+              }
+            }}
+            required={field !== "photo"} // logo is optional
             autoComplete={
               field === "password" ? "new-password" :
               field === "passwordConf" ? "new-password" :
