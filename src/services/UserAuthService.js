@@ -1,90 +1,3 @@
-// const BASE_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/auth`;
-
-// const UserSignUp = async (formData) => {
-//   try {
-//     const res = await fetch(`${BASE_URL}/sign-up-user`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(formData)
-//     });
-//     const data = await res.json();
-//     if (!res.ok) throw new Error(data.err || 'Sign up failed');
-//     localStorage.setItem('token', data.token);
-//     return JSON.parse(atob(data.token.split('.')[1]));
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// const UserSignIn = async (formData) => {
-//   try {
-//     const res = await fetch(`${BASE_URL}/sign-in-user`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(formData)
-//     });
-//     const data = await res.json();
-//     if (!res.ok) throw new Error(data.err || 'Sign in failed');
-//     localStorage.setItem('token', data.token);
-//     return JSON.parse(atob(data.token.split('.')[1]));
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// const UserUpdateProfile = async (formData) => {
-//   try {
-//     const token = localStorage.getItem('token');
-//     if (!token) throw new Error("Not logged in");
-//     const res = await fetch(`${BASE_URL}/user/profile`, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`
-//       },
-//       body: JSON.stringify(formData)
-//     });
-//     const data = await res.json();
-//     if (!res.ok) throw new Error(data.err || 'Update failed');
-//     return data;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// const getUser = () => {
-//   const token = localStorage.getItem('token');
-//   return token ? JSON.parse(atob(token.split('.')[1])) : null;
-// };
-
-// const getCurrentUser = async () => {
-//   const token = localStorage.getItem('token');
-//   if (!token) return null;
-  
-//   const res = await fetch(`${BASE_URL}/currentUser`, {
-//     headers: { Authorization: `Bearer ${token}` }
-//   });
-//   const data = await res.json();
-//   if (!res.ok) throw new Error(data.err || "Failed to fetch current user");
-//   return data.user;
-// };
-
-
-// export { 
-//   UserSignUp, 
-//   UserSignIn, 
-//   UserUpdateProfile, 
-//   getUser,
-//   getCurrentUser 
-// };
-
-
-
-
-
-// UsersAuthService.js
-
-
 const AUTH_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/auth`;
 const USERS_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/users`;
 
@@ -95,23 +8,29 @@ const USERS_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/users`;
  */
 const UserSignUp = async (formData) => {
   try {
-    const res = await fetch(`${AUTH_URL}/sign-up-user`, {
+    const data = new FormData();
+    data.append("username", formData.username);
+    data.append("password", formData.password);
+    data.append("passwordConf", formData.passwordConf);
+    data.append("email", formData.email);
+    if (formData.photo) data.append("photo", formData.photo);
+
+    const res = await fetch(`${import.meta.env.VITE_BACK_END_SERVER_URL}/api/auth/sign-up-user`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: data
     });
 
-    const data = await res.json();
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.err || result.message);
 
-    if (!res.ok) throw new Error(data.err || 'Sign up failed');
-
-    localStorage.setItem('token', data.token);
-    return JSON.parse(atob(data.token.split('.')[1]));
+    localStorage.setItem('token', result.token);
+    return JSON.parse(atob(result.token.split('.')[1]));
   } catch (err) {
     console.error('UserSignUp Error:', err);
     throw err;
   }
 };
+
 
 /**
  * Sign in an existing user
@@ -182,6 +101,8 @@ const getUser = () => {
   }
 };
 
+// console.log("Get User", getUser())
+
 /**
  * Fetch current user from backend
  * @returns {Object|null} user object from server
@@ -204,6 +125,8 @@ const getCurrentUser = async () => {
     throw err;
   }
 };
+
+console.log("getCurrentUser: ", getCurrentUser())
 
 // ================== Export ==================
 export {

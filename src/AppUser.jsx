@@ -34,25 +34,28 @@ function AppUser() {
   }, []);
 
   // ==================== User Functions ====================
-  const UserHandleSignUp = async (formData) => {
-    try {
-      const UserData = await UserAuthService.UserSignUp(formData);
-      setUser(UserData);
-      return { success: true };
-    } catch (err) {
-      return { success: false, message: err.message };
-    }
-  };
 
-  const UserHandleSignIn = async (formData) => {
-    try {
-      const UserData = await UserAuthService.UserSignIn(formData);
-      setUser(UserData);
-      navigate("/user/home");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+const UserHandleSignUp = async (formData) => {
+  try {
+    await UserAuthService.UserSignUp(formData); 
+    const currentUser = await UserAuthService.getCurrentUser(); 
+    setUser(currentUser); 
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+};
+
+const UserHandleSignIn = async (formData) => {
+  try {
+    await UserAuthService.UserSignIn(formData); 
+    const currentUser = await UserAuthService.getCurrentUser();
+    setUser(currentUser); 
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const UserHandleLogout = () => {
     localStorage.removeItem("token");
