@@ -61,6 +61,15 @@ import {
             }}
           >
             {/* ====== Flight Header ====== */}
+
+                        {flight.airline_logo && (
+              <img
+                src={flight.airline_logo}
+                alt={`${flight.airline_name} Logo`}
+                style={{ width: "50px", marginBottom: "10px" }}
+              />
+            )}
+
             <h5>
               <FaHashtag /> Flight: {flight.flight_number}
             </h5>
@@ -91,8 +100,9 @@ import {
               <FaMoneyBillWave /> Price: {flight.price} BHD
             </p>
 
+            <button>View</button>
 
-          </Link>
+          </Link>        
         ))}
       </div>
     </div>

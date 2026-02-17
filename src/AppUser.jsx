@@ -101,6 +101,7 @@ const UserHandleSignIn = async (formData) => {
          path="/user/flights" 
          element={<UserFlights 
           user={user}/>} 
+          flights={flights}
           
           />
 
