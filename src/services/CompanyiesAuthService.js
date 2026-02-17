@@ -2,19 +2,36 @@ const BASE_URL = `${import.meta.env.VITE_BACK_END_SERVER_URL}/api/companyies`;
 
 const signUp = async (formData) => {
   try {
+    const data = new FormData();
+
+    data.append("employee_username", formData.employee_username);
+    data.append("password", formData.password);
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("license", formData.license);
+
+    if (formData.logo) {
+      data.append("logo", formData.logo); 
+    }
+
     const res = await fetch(`${BASE_URL}/sign-up-airlines`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      method: "POST",
+      body: data 
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.err || 'Sign up failed');
-    localStorage.setItem('token', data.token);
-    return JSON.parse(atob(data.token.split('.')[1]));
+
+    const result = await res.json();
+
+    if (!res.ok) throw new Error(result.err || "Sign up failed");
+
+    localStorage.setItem("token", result.token);
+
+    return JSON.parse(atob(result.token.split(".")[1]));
   } catch (err) {
     throw err;
   }
 };
+
 
 const signIn = async (formData) => {
   try {
