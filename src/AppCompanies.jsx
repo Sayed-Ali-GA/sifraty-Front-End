@@ -87,18 +87,16 @@ function AppCompanies() {
   };
 
   // ====== Profile Update ======
-  const handleProfileUpdate = async (formData) => {
-    try {
-      const updatedCompany = await CompanyiesAuthService.updateProfile(formData);
-      setCompany(updatedCompany);
-      localStorage.setItem("token", updatedCompany.token || localStorage.getItem("token"));
-      localStorage.setItem("company", JSON.stringify(updatedCompany));
-      return updatedCompany;
-    } catch (err) {
-      console.error("Update failed:", err);
-      throw err;
-    }
-  };
+const handleProfileUpdate = async (formData) => {
+  try {
+    const updatedCompany = await CompanyiesAuthService.updateProfile(formData);
+    setCompany(updatedCompany);
+    return updatedCompany;
+  } catch (err) {
+    console.error("Update failed:", err);
+    throw err;
+  }
+};
 
   // ====== JSX ======
   return (
