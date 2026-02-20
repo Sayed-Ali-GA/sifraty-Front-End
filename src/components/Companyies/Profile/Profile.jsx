@@ -18,7 +18,6 @@ export default function ProfileCompany({ company, handleProfileUpdate }) {
   const [message, setMessage] = useState("");
   const [logoFile, setLogoFile] = useState(null);
 
-  // Initialize form
   useEffect(() => {
     if (!company) {
       navigate("/sign-in");
@@ -45,17 +44,16 @@ export default function ProfileCompany({ company, handleProfileUpdate }) {
     setMessage("");
 
     // Validation
-    if (field === 'name' && !form.name.trim()) {
+    if (field === "name" && !form.name.trim()) {
       setMessage("Name is required");
       setLoading(false);
       return;
     }
-    if (field === 'email' && (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))) {
+    if (field === "email" && (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email))) {
       setMessage("Valid email is required");
       setLoading(false);
       return;
     }
-    
 
     try {
       await handleProfileUpdate(form);
@@ -85,72 +83,95 @@ export default function ProfileCompany({ company, handleProfileUpdate }) {
   const fields = ["name", "employee_username", "email", "phone", "license", "logo"];
 
   return (
-    <div style={{ maxWidth: "500px", margin: "20px auto", fontFamily: "Arial, sans-serif" }}>
-      <h1>Company Profile</h1>
+    <div className="container my-4" style={{ maxWidth: "600px" }}>
+      <h1 className="mb-4 text-center">Company Profile</h1>
 
-      {form.logo && typeof form.logo === 'string' && (
-        <div style={{ marginBottom: "20px" }}>
-          <img src={form.logo} alt="Company Logo" width="150" />
+      {/* Logo preview */}
+      {form.logo && typeof form.logo === "string" && (
+        <div className="text-center mb-4">
+          <img src={form.logo} alt="Company Logo" className="img-thumbnail" style={{ maxWidth: "150px" }} />
         </div>
       )}
 
       {fields.map(field => (
-        <div key={field} style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", fontWeight: "bold" }}>
+        <div key={field} className="mb-3">
+          <label className="form-label fw-bold">
             {field.charAt(0).toUpperCase() + field.slice(1)}:
           </label>
 
           {editingField === field ? (
-            field === 'logo' ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            field === "logo" ? (
+              <div className="input-group">
                 <input
                   type="file"
                   name="logo"
+                  className="form-control"
                   onChange={(e) => {
                     const file = e.target.files[0];
                     setLogoFile(file);
                     setForm(prev => ({ ...prev, logo: file || prev.logo }));
                   }}
-                  style={{ flex: 1, padding: "5px" }}
                 />
-                <button type="button" onClick={() => saveField(field)} disabled={loading} title="Save">
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={() => saveField(field)}
+                  disabled={loading}
+                  title="Save"
+                >
                   <FaSave />
                 </button>
-                <button type="button" onClick={cancelEdit} title="Cancel">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={cancelEdit}
+                  title="Cancel"
+                >
                   <FaTimes />
                 </button>
               </div>
             ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <div className="input-group">
                 <input
                   type={field === "email" ? "email" : "text"}
                   name={field}
+                  className="form-control"
                   value={form[field]}
                   onChange={handleChange}
-                  style={{ flex: 1, padding: "5px" }}
                 />
-                <button type="button" onClick={() => saveField(field)} disabled={loading} title="Save">
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={() => saveField(field)}
+                  disabled={loading}
+                  title="Save"
+                >
                   <FaSave />
                 </button>
-                <button type="button" onClick={cancelEdit} title="Cancel">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={cancelEdit}
+                  title="Cancel"
+                >
                   <FaTimes />
                 </button>
               </div>
             )
           ) : (
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              {field === 'logo' ? (
-                form.logo && typeof form.logo === 'string' ? (
-                  <img src={form.logo} alt="Logo" width="50" />
+            <div className="d-flex align-items-center justify-content-between">
+              {field === "logo" ? (
+                form.logo && typeof form.logo === "string" ? (
+                  <img src={form.logo} alt="Logo" className="img-thumbnail" style={{ maxWidth: "50px" }} />
                 ) : logoFile ? (
-                  <img src={URL.createObjectURL(logoFile)} alt="New Logo Preview" width="50" />
+                  <img src={URL.createObjectURL(logoFile)} alt="New Logo Preview" className="img-thumbnail" style={{ maxWidth: "50px" }} />
                 ) : (
                   <span>No logo</span>
                 )
               ) : (
-                <span style={{ flex: 1 }}>{form[field]}</span>
+                <span>{form[field]}</span>
               )}
-              <button type="button" onClick={() => setEditingField(field)} title="Edit">
+              <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => setEditingField(field)} title="Edit">
                 <FaEdit />
               </button>
             </div>
@@ -158,7 +179,11 @@ export default function ProfileCompany({ company, handleProfileUpdate }) {
         </div>
       ))}
 
-      {message && <p style={{ color: message.includes("successfully") ? "green" : "red", fontWeight: "bold" }}>{message}</p>}
+      {message && (
+        <div className={`alert ${message.includes("successfully") ? "alert-success" : "alert-danger"}`} role="alert">
+          {message}
+        </div>
+      )}
     </div>
   );
 }

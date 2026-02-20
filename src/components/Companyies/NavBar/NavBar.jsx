@@ -1,29 +1,90 @@
-import { Link } from 'react-router-dom';
-import logo from '../../../assets/Logo-sifraty.png';
+import { Link } from "react-router-dom";
+import logo from "../../../assets/Logo-sifraty.png";
 
 const NavBarCompanyies = ({ company, handleLogout }) => {
-  // console.log("Company: ", company)
   return (
-    <nav style={{ padding: '10px 20px', background: '#222', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Link to="/"><img src={logo} alt="Sifraty Logo" /></Link>
-      <div>
-        {company ? (
-          <>
-          <img src={company.logo} alt="Company" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div className="container">
 
-            <Link to="/flights" style={{ marginRight: '10px' }}>Flights</Link>
-            <Link to="/flights/new" style={{ marginRight: '10px' }}>Add Flight</Link>
-            <Link to="/profile" style={{ marginRight: '10px' }}>Profile</Link>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/sign-in" style={{ marginRight: '10px' }}>Sign In</Link>
-            <Link to="/sign-up">Sign Up</Link>
-          </>
-        )}
+        {/* Logo */}
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img
+            src={logo}
+            alt="Logo"
+            width="35"
+            height="35"
+            className="me-2"
+          />
+          Sfraty
+        </Link>
+
+        {/* Toggle Button */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCompany"
+          aria-controls="navbarCompany"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Links */}
+        <div className="collapse navbar-collapse" id="navbarCompany">
+          <ul className="navbar-nav ms-auto">
+
+            {company ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/flights">
+                    Flights
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link className="nav-link" to="/flights/new">
+                    Add Flight
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profile">
+                    Profile
+                  </Link>
+                </li>
+
+                <li className="nav-item ms-lg-2">
+                  <button
+                    className="btn btn-outline-light btn-sm"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/sign-in">
+                    Sign In
+                  </Link>
+                </li>
+
+                <li className="nav-item ms-lg-2">
+                  <Link className="btn btn-primary btn-sm" to="/sign-up">
+                    Sign Up
+                  </Link>
+                </li>
+              </>
+            )}
+
+          </ul>
+        </div>
       </div>
     </nav>
-  )
-}
+  );
+};
+
 export default NavBarCompanyies;

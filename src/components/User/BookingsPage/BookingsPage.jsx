@@ -1,21 +1,29 @@
+/* ===============================
+   Imports
+=============================== */
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Select from "react-select";
+
 import * as TicketService from "../../../services/TicketService";
 import * as BookingService from "../../../services/BookingService";
 
+/* ===============================
+   Reusable Components
+=============================== */
 
-    const FormInput = ({ 
-      label,
-      name,
-      value, 
-      onChange, 
-      type = "text", placeholder }) => (
-  <div style={{ marginBottom: "10px" }}>
-    <label htmlFor={name} style={{ fontWeight: "bold", display: "block", marginBottom: "5px" }}>
-      {label}:
+const FormInput = ({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  placeholder
+}) => (
+  <div className="mb-3">
+    <label htmlFor={name} className="form-label fw-semibold">
+      {label}
     </label>
-    
     <input
       id={name}
       name={name}
@@ -23,28 +31,27 @@ import * as BookingService from "../../../services/BookingService";
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #ccc" }}
+      className="form-control"
     />
   </div>
 );
 
-/* ===============================
-   Reusable Select Component
-=============================== */
 const FormSelect = ({ label, value, onChange, options }) => (
-  <div style={{ marginBottom: "10px" }}>
-    <label style={{ fontWeight: "bold", display: "block", marginBottom: "5px" }}>
-      {label}:
-    </label>
+  <div className="mb-3">
+    <label className="form-label fw-semibold">{label}</label>
     <Select
       value={value ? { value, label: value } : null}
       onChange={(option) => onChange(option.value)}
       options={options}
       placeholder={`Select ${label}`}
-      styles={{ container: (base) => ({ ...base, width: "100%" }) }}
+      classNamePrefix="react-select"
     />
   </div>
 );
+
+/* ===============================
+   Constants
+=============================== */
 
 const initialFormState = {
   first_name: "",
@@ -56,6 +63,10 @@ const initialFormState = {
   email: "",
   notes: ""
 };
+
+/* ===============================
+   Component
+=============================== */
 
 const BookingsPage = () => {
   const { flightId } = useParams();
@@ -74,13 +85,13 @@ const BookingsPage = () => {
   useEffect(() => {
     const fetchFlight = async () => {
       try {
-        const flightData = await TicketService.show(flightId);
-        setFlight(flightData);
-      } catch (err) {
-        console.error(err);
+        const data = await TicketService.show(flightId);
+        setFlight(data);
+      } catch {
         setError("Failed to load flight.");
       }
     };
+
     fetchFlight();
   }, [flightId]);
 
@@ -96,42 +107,56 @@ const BookingsPage = () => {
         const data = await res.json();
 
         const options = data.data
-          .filter(c => c.name.toLowerCase() !== "israel")
-          .map(c => ({ value: c.name, label: c.name }));
+          .filter((c) => c.name.toLowerCase() !== "israel")
+          .map((c) => ({ value: c.name, label: c.name }));
 
         setNationalitiesOptions(options);
-      } catch (err) {
-        console.error(err);
+      } catch {
         setError("Failed to load nationalities.");
       }
     };
+
     fetchNationalities();
   }, []);
 
   /* ===============================
-     Handle Input Change
+     Handlers
   =============================== */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBookingData(prev => ({ ...prev, [name]: value }));
+
+  const handleChange = ({ target: { name, value } }) => {
+    setBookingData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  /* ===============================
-     Validation
-  =============================== */
+  const handleNationalityChange = (value) => {
+    setBookingData((prev) => ({
+      ...prev,
+      nationality: value
+    }));
+  };
+
   const validateForm = () => {
-    if (!bookingData.first_name.trim()) return "First name is required.";
-    if (!bookingData.last_name.trim()) return "Last name is required.";
-    if (!bookingData.passport_number.trim()) return "Passport number is required.";
-    if (!bookingData.nationality) return "Nationality is required.";
-    if (!bookingData.age) return "Age is required.";
-    if (bookingData.email && !bookingData.email.includes("@")) return "Valid email is required.";
+    const {
+      first_name,
+      last_name,
+      passport_number,
+      nationality,
+      age,
+      email
+    } = bookingData;
+
+    if (!first_name.trim()) return "First name is required.";
+    if (!last_name.trim()) return "Last name is required.";
+    if (!passport_number.trim()) return "Passport number is required.";
+    if (!nationality) return "Nationality is required.";
+    if (!age) return "Age is required.";
+    if (email && !email.includes("@")) return "Valid email is required.";
+
     return null;
   };
 
-  /* ===============================
-     Submit Booking
-  =============================== */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -145,117 +170,191 @@ const BookingsPage = () => {
       setLoading(true);
       setError("");
 
-      const res = await BookingService.bookFlight(flight.id, bookingData);
+      const res = await BookingService.bookFlight(
+        flight.id,
+        bookingData
+      );
 
-      if (res && res.id) {
+      if (res?.id) {
         setBookingSuccess(true);
         setBookingData(initialFormState);
 
-        setTimeout(() => {
-          navigate("/user/flights");
-        }, 2000);
+        setTimeout(() => navigate("/user/flights"), 2000);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Booking failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!flight) return <p>Loading flight...</p>;
+  /* ===============================
+     Loading State
+  =============================== */
+
+  if (!flight) {
+    return (
+      <div className="text-center mt-5">
+        <div className="spinner-border text-dark" />
+      </div>
+    );
+  }
+
+  /* ===============================
+     Render
+  =============================== */
 
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto" }}>
-      <h2>Book Flight: {flight.flight_number}</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {bookingSuccess && (
-        <p style={{ color: "green" }}>Booking successful! Redirecting...</p>
-      )}
+    <div
+      className="container-fluid py-5"
+      style={{ backgroundColor: "#f4f6f9", minHeight: "100vh" }}
+    >
+      <div className="row justify-content-center">
+        <div className="col-xl-7 col-lg-8 col-md-10">
 
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          label="First Name"
-          name="first_name"
-          value={bookingData.first_name}
-          onChange={handleChange}
-          placeholder="Enter your First Name"
-        />
+          <div className="card border-0 shadow-sm rounded-4">
+            <div className="card-body p-5">
 
-        <FormInput
-          label="Last Name"
-          name="last_name"
-          value={bookingData.last_name}
-          onChange={handleChange}
-          placeholder="Enter your Last Name"
-        />
+              
+        <Link to="/user/flights">
+          <button className="btn btn-outline-secondary">← Back</button>
+        </Link>
 
-        <FormInput
-          label="Passport Number"
-          name="passport_number"
-          value={bookingData.passport_number}
-          onChange={handleChange}
-          placeholder="Enter Passport Number"
-        />
+              {/* Header */}
+              <div className="mb-4 text-center">
+                <h2 className="fw-bold mb-1">Booking Details</h2>
+                <p className="text-muted mb-0">
+                  Flight {flight.flight_number}
+                </p>
+              </div>
 
-        <FormSelect
-          label="Nationality"
-          value={bookingData.nationality}
-          onChange={(val) => setBookingData(prev => ({ ...prev, nationality: val }))}
-          options={nationalitiesOptions}
-        />
+              {/* Flight Info */}
+              <div className="bg-light rounded-3 p-3 mb-4 border">
+                <div className="row text-center">
+                  <div className="col-md-4">
+                    <small className="text-muted d-block">From</small>
+                    <span className="fw-semibold">{flight.from_city}</span>
+                  </div>
+                  <div className="col-md-4">
+                    <small className="text-muted d-block">To</small>
+                    <span className="fw-semibold">{flight.to_city}</span>
+                  </div>
+                  <div className="col-md-4">
+                    <small className="text-muted d-block">Price</small>
+                    <span className="fw-semibold">${flight.price}</span>
+                  </div>
+                </div>
+              </div>
 
-        <FormInput
-          label="Age"
-          name="age"
-          type="number"
-          value={bookingData.age}
-          onChange={handleChange}
-          placeholder="Enter your Age"
-        />
+              {/* Alerts */}
+              {error && (
+                <div className="alert alert-danger rounded-3">
+                  {error}
+                </div>
+              )}
 
-        <FormInput
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          value={bookingData.phone}
-          onChange={handleChange}
-          placeholder="12345679"
-        />
+              {bookingSuccess && (
+                <div className="alert alert-success rounded-3">
+                  Booking successful. Redirecting...
+                </div>
+              )}
 
-        <FormInput
-          label="Email"
-          name="email"
-          type="email"
-          value={bookingData.email}
-          onChange={handleChange}
-          placeholder="@gmail.com"
-        />
+              {/* Form */}
+              <form onSubmit={handleSubmit}>
 
-        <FormInput
-          label="Notes"
-          name="notes"
-          value={bookingData.notes}
-          onChange={handleChange}
-          placeholder="Write your notes here..."
-        />
+                <div className="row">
+                  <div className="col-md-6">
+                    <FormInput
+                      label="First Name"
+                      name="first_name"
+                      value={bookingData.first_name}
+                      onChange={handleChange}
+                      placeholder="Enter your first name"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <FormInput
+                      label="Last Name"
+                      name="last_name"
+                      value={bookingData.last_name}
+                      onChange={handleChange}
+                      placeholder="Enter your last name"
+                    />
+                  </div>
+                </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
-        >
-          {loading ? "Booking..." : "Confirm Booking"}
-        </button>
-      </form>
+                <FormInput
+                  label="Passport Number"
+                  name="passport_number"
+                  value={bookingData.passport_number}
+                  onChange={handleChange}
+                  placeholder="Enter passport number"
+                />
+
+                <FormSelect
+                  label="Nationality"
+                  value={bookingData.nationality}
+                  onChange={handleNationalityChange}
+                  options={nationalitiesOptions}
+                />
+
+                <div className="row">
+                  <div className="col-md-4">
+                    <FormInput
+                      label="Age"
+                      name="age"
+                      type="number"
+                      value={bookingData.age}
+                      onChange={handleChange}
+                      placeholder="e.g. 28"
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <FormInput
+                      label="Phone"
+                      name="phone"
+                      type="tel"
+                      value={bookingData.phone}
+                      onChange={handleChange}
+                      placeholder="+973 3XXX XXXX"
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <FormInput
+                      label="Email"
+                      name="email"
+                      type="email"
+                      value={bookingData.email}
+                      onChange={handleChange}
+                      placeholder="example@email.com"
+                    />
+                  </div>
+                </div>
+
+                <FormInput
+                  label="Notes"
+                  name="notes"
+                  value={bookingData.notes}
+                  onChange={handleChange}
+                  placeholder="Additional requests (optional)"
+                />
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn btn-dark w-100 mt-4 py-2 rounded-3 fw-semibold"
+                >
+                  {loading ? "Processing..." : "Confirm Booking"}
+                </button>
+
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 };

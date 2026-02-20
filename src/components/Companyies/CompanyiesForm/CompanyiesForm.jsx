@@ -160,156 +160,209 @@ const CompanyiesForm = ({ flights = [], handleAddFlight, handleUpdateFlight }) =
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 500, margin: "20px auto" }}>
-      <h2 style={{ marginBottom: "20px" }}>
-        {selectedFlight ? "Edit Company Flight" : "Add New Company Flight"}
-      </h2>
+  <div className="container py-5">
+    <div className="row justify-content-center">
+      <div className="col-lg-7">
 
-      <FieldWrapper icon={<FaGlobe />} label="From Country">
-        <Select
-          placeholder="Select Country"
-          isSearchable
-          options={countryOptions}
-          value={countryOptions.find(c => c.value === formData.fromCountry) || null}
-          onChange={(opt) => {
-            setFormData(prev => ({ ...prev, fromCountry: opt.value, fromCity: "" }));
-            fetchCities(opt.value, "from");
+        <div
+          className="p-4 shadow-lg"
+          style={{
+            borderRadius: "20px",
+            background: "rgba(255,255,255,0.95)",
+            backdropFilter: "blur(10px)",
           }}
-          styles={selectStyles}
-        />
-      </FieldWrapper>
+        >
+          <h3 className="text-center mb-4 fw-bold">
+            {selectedFlight ? "Edit Company Flight" : "Add New Company Flight"}
+          </h3>
 
-      <FieldWrapper icon={<FaCity />} label="From City">
-        <Select
-          placeholder="Select City"
-          isSearchable
-          options={cityOptions(fromCities)}
-          value={cityOptions(fromCities).find(c => c.value === formData.fromCity) || null}
-          onChange={(opt) => setFormData(prev => ({ ...prev, fromCity: opt.value }))}
-          styles={selectStyles}
-        />
-      </FieldWrapper>
+          <form onSubmit={handleSubmit}>
 
-      <FieldWrapper icon={<FaGlobe />} label="To Country">
-        <Select
-          placeholder="Select Country"
-          isSearchable
-          options={countryOptions}
-          value={countryOptions.find(c => c.value === formData.toCountry) || null}
-          onChange={(opt) => {
-            setFormData(prev => ({ ...prev, toCountry: opt.value, toCity: "" }));
-            fetchCities(opt.value, "to");
-          }}
-          styles={selectStyles}
-        />
-      </FieldWrapper>
+            {/* From Country */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">
+                <FaGlobe className="me-2" />
+                From Country
+              </label>
+              <Select
+                options={countryOptions}
+                value={countryOptions.find(c => c.value === formData.fromCountry) || null}
+                onChange={(opt) => {
+                  setFormData(prev => ({ ...prev, fromCountry: opt.value, fromCity: "" }));
+                  fetchCities(opt.value, "from");
+                }}
+              />
+            </div>
 
-      <FieldWrapper icon={<FaCity />} label="To City">
-        <Select
-          placeholder="Select City"
-          isSearchable
-          options={cityOptions(toCities)}
-          value={cityOptions(toCities).find(c => c.value === formData.toCity) || null}
-          onChange={(opt) => setFormData(prev => ({ ...prev, toCity: opt.value }))}
-          styles={selectStyles}
-        />
-      </FieldWrapper>
+            {/* From City */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">
+                <FaCity className="me-2" />
+                From City
+              </label>
+              <Select
+                options={cityOptions(fromCities)}
+                value={cityOptions(fromCities).find(c => c.value === formData.fromCity) || null}
+                onChange={(opt) =>
+                  setFormData(prev => ({ ...prev, fromCity: opt.value }))
+                }
+              />
+            </div>
 
-      <FieldWrapper icon={<FaPlaneDeparture />} label="Departure">
-        <input
-          type="datetime-local"
-          name="departure"
-          value={formData.departure}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+            {/* To Country */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">
+                <FaGlobe className="me-2" />
+                To Country
+              </label>
+              <Select
+                options={countryOptions}
+                value={countryOptions.find(c => c.value === formData.toCountry) || null}
+                onChange={(opt) => {
+                  setFormData(prev => ({ ...prev, toCountry: opt.value, toCity: "" }));
+                  fetchCities(opt.value, "to");
+                }}
+              />
+            </div>
 
-      <FieldWrapper icon={<FaPlaneArrival />} label="Arrival">
-        <input
-          type="datetime-local"
-          name="arrival"
-          value={formData.arrival}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+            {/* To City */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">
+                <FaCity className="me-2" />
+                To City
+              </label>
+              <Select
+                options={cityOptions(toCities)}
+                value={cityOptions(toCities).find(c => c.value === formData.toCity) || null}
+                onChange={(opt) =>
+                  setFormData(prev => ({ ...prev, toCity: opt.value }))
+                }
+              />
+            </div>
 
-      <FieldWrapper icon={<FaMoneyBillWave />} label="Price (BHD)">
-        <input
-          type="text"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          placeholder="Price BHD"
-          required
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  <FaPlaneDeparture className="me-2" />
+                  Departure
+                </label>
+                <input
+                  type="datetime-local"
+                  name="departure"
+                  value={formData.departure}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-      <FieldWrapper icon={<FaHashtag />} label="Flight Number">
-        <input
-          type="text"
-          name="flightNumber"
-          value={formData.flightNumber}
-          onChange={handleChange}
-          placeholder="Flight Number"
-          required
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  <FaPlaneArrival className="me-2" />
+                  Arrival
+                </label>
+                <input
+                  type="datetime-local"
+                  name="arrival"
+                  value={formData.arrival}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </div>
 
-      <FieldWrapper icon={<FaSuitcase />} label="Baggage (kg)">
-        <input
-          type="text"
-          name="baggage"
-          value={formData.baggage}
-          onChange={handleChange}
-          placeholder="Baggage kg"
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  <FaMoneyBillWave className="me-2" />
+                  Price (BHD)
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-      <FieldWrapper icon={<FaWifi />} label="Wi-Fi Available">
-        <input
-          type="checkbox"
-          name="wifi"
-          checked={formData.wifi}
-          onChange={handleChange}
-        />
-      </FieldWrapper>
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  <FaHashtag className="me-2" />
+                  Flight Number
+                </label>
+                <input
+                  type="text"
+                  name="flightNumber"
+                  value={formData.flightNumber}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+            </div>
 
-      <FieldWrapper icon={<FaHashtag />} label="Seats Available">
-        <input
-          type="number"
-          name="seatsAvailable"
-          value={formData.seatsAvailable || ""}
-          onChange={handleChange}
-          placeholder="Number of seats"
-          required
-          min={0}
-          style={{ width: "100%", padding: 8, borderRadius: 8, border: "1px solid #4f46e5" }}
-        />
-      </FieldWrapper>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  <FaSuitcase className="me-2" />
+                  Baggage (kg)
+                </label>
+                <input
+                  type="number"
+                  name="baggage"
+                  value={formData.baggage}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
 
-      <button
-        type="submit"
-        style={{
-          width: "100%",
-          padding: 10,
-          backgroundColor: "#4f46e5",
-          color: "#fff",
-          borderRadius: 8,
-          border: "none",
-          marginTop: 10
-        }}
-      >
-        {selectedFlight ? "Update Company Flight" : "Add Company Flight"}
-      </button>
-    </form>
-  );
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-semibold">
+                  Seats Available
+                </label>
+                <input
+                  type="number"
+                  name="seatsAvailable"
+                  value={formData.seatsAvailable || ""}
+                  onChange={handleChange}
+                  className="form-control"
+                  min={0}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-check mb-4">
+              <input
+                type="checkbox"
+                name="wifi"
+                checked={formData.wifi}
+                onChange={handleChange}
+                className="form-check-input"
+                id="wifiCheck"
+              />
+              <label className="form-check-label fw-semibold" htmlFor="wifiCheck">
+                <FaWifi className="me-2" />
+                Wi-Fi Available
+              </label>
+            </div>
+
+            <button type="submit" className="btn btn-dark w-100 py-2 rounded-3">
+              {selectedFlight ? "Update Flight" : "Add Flight"}
+            </button>
+            
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+);
+
 };
 
 export default CompanyiesForm;

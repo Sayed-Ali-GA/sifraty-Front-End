@@ -1,24 +1,25 @@
 import { Link } from "react-router-dom";
 
 function HomeUser({ user }) {
+
   // ======== User not logged in ========
   if (!user) {
     return (
-      <main style={{ textAlign: "center", padding: "2rem" }}>
-        <h1>Please sign in to access this page</h1>
-        <div style={{ marginTop: "1rem" }}>
-          <Link 
-            to="/user/sign-in" 
-            style={{ color: "blue", textDecoration: "underline", marginRight: "1rem" }}
-          >
-            Go to Sign In
-          </Link>
-          <Link 
-            to="/user/sign-up" 
-            style={{ color: "blue", textDecoration: "underline" }}
-          >
-            Go to Sign Up
-          </Link>
+      <main className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+        <div className="text-center p-4 bg-white shadow-sm rounded" style={{ maxWidth: "500px", width: "100%" }}>
+          <h2 className="mb-3">Access Required</h2>
+          <p className="text-muted mb-4">
+            Please sign in to continue and explore available flights.
+          </p>
+
+          <div className="d-flex justify-content-center gap-3">
+            <Link to="/user/sign-in" className="btn btn-primary px-4">
+              Sign In
+            </Link>
+            <Link to="/user/sign-up" className="btn btn-outline-secondary px-4">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </main>
     );
@@ -26,24 +27,15 @@ function HomeUser({ user }) {
 
   // ======== User logged in ========
   return (
-    <main style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>Welcome, {user.username}!</h1>
-      <h2>Sfraty: Find your perfect travel type</h2>
-      <div style={{ marginTop: "1.5rem" }}>
-        <Link 
-          to="/user/flights" 
-          style={{
-            display: "inline-block",
-            padding: "0.5rem 1rem",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            borderRadius: "5px",
-            textDecoration: "none",
-            transition: "background-color 0.2s"
-          }}
-          onMouseEnter={e => e.currentTarget.style.backgroundColor = "#0056b3"}
-          onMouseLeave={e => e.currentTarget.style.backgroundColor = "#007bff"}
-        >
+    <main className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+      <div className="text-center p-5 bg-white shadow-sm rounded" style={{ maxWidth: "600px", width: "100%" }}>
+        <h1 className="mb-3">Welcome, {user.username}</h1>
+
+        <p className="lead text-muted mb-4">
+          Discover flights tailored to your travel preferences.
+        </p>
+
+        <Link to="/user/flights" className="btn btn-primary btn-lg px-5">
           View Flights
         </Link>
       </div>

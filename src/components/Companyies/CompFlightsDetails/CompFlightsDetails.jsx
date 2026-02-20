@@ -1,6 +1,6 @@
+// FlightDetailsPage.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import {
   FaPlane,
   FaPlaneDeparture,
@@ -15,7 +15,8 @@ import {
   FaEnvelope,
   FaPhone,
   FaStickyNote,
-  FaArrowLeft
+  FaArrowLeft,
+  FaPrint,
 } from "react-icons/fa";
 
 import * as TicketService from "../../../services/TicketService";
@@ -30,11 +31,10 @@ const FlightDetailsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(null);
 
+  // حساب مدة الرحلة
   const calculateFlightDuration = (departureTime, arrivalTime) => {
     if (!departureTime || !arrivalTime) return "-";
-    const departureDate = new Date(departureTime);
-    const arrivalDate = new Date(arrivalTime);
-    const diff = arrivalDate - departureDate;
+    const diff = new Date(arrivalTime) - new Date(departureTime);
     if (diff <= 0) return "-";
     const totalMinutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(totalMinutes / 60);
@@ -42,6 +42,13 @@ const FlightDetailsPage = () => {
     return `${hours}h ${minutes}m`;
   };
 
+  const formatDateTime = (dateTime) =>
+    dateTime ? new Date(dateTime).toLocaleString() : "-";
+
+  const formatCurrency = (amount) =>
+    amount ? `${Number(amount).toFixed(2)} BHD` : "-";
+
+  // جلب بيانات الرحلة والركاب
   useEffect(() => {
     const fetchFlightData = async () => {
       try {
@@ -55,155 +62,154 @@ const FlightDetailsPage = () => {
         setFlightBookings(Array.isArray(bookingsData) ? bookingsData : []);
       } catch (error) {
         console.error("Error fetching flight details:", error);
-        setLoadingError("Unable to load flight information. Please try again later.");
+        setLoadingError(
+          "Unable to load flight information. Please try again later."
+        );
       } finally {
         setIsLoading(false);
       }
     };
-
     if (flightId) fetchFlightData();
   }, [flightId]);
 
-  const formatDateTime = (dateTime) => (dateTime ? new Date(dateTime).toLocaleString() : "-");
-  const formatCurrency = (amount) => (amount ? ` ${Number(amount).toFixed(2)} BHD` : "-");
+  const handlePrint = () => window.print();
 
-  if (isLoading) return <p>Loading flight details...</p>;
-  if (loadingError) return <p style={{ color: "red" }}>{loadingError}</p>;
-  if (!flightInformation) return <p>No flight information found.</p>;
+  // Loader
+  if (isLoading)
+    return (
+      <div className="container my-5 text-center pt-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading flight details...</p>
+      </div>
+    );
+
+  // Error
+  if (loadingError)
+    return (
+      <div className="container my-5 pt-5">
+        <div className="alert alert-danger">{loadingError}</div>
+      </div>
+    );
+
+  if (!flightInformation)
+    return (
+      <div className="container my-5 pt-5">
+        <div className="alert alert-warning">No flight information found.</div>
+      </div>
+    );
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      {/* ===== Back Button ===== */}
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginBottom: "20px",
-          padding: "8px 12px",
-          fontSize: "14px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: "5px"
-        }}
-      >
-        <FaArrowLeft /> Back to Flights
-      </button>
+    <div className="container my-4 pt-5"> {/* pt-5 لإزاحة المحتوى أسفل Navbar */}
+      {/* ===== Back Button Top Right ===== */}
+      <div className="d-flex justify-content-end mb-3">
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => navigate(-1)}
+        >
+          <FaArrowLeft className="me-2" />
+          Back
+        </button>
+      </div>
 
       {/* ===== Flight Header ===== */}
-      <h1 style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <h2 className="mb-4 d-flex align-items-center gap-2">
         <FaPlane /> Flight Information
-      </h1>
+      </h2>
 
       {/* ===== Flight Information Table ===== */}
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ marginBottom: "30px", width: "100%", borderCollapse: "collapse" }}
-      >
-        <tbody>
-          <tr>
-            <th><FaPlaneDeparture /> Departure City</th>
-            <td>{flightInformation.from_city}, {flightInformation.from_country}</td>
-            <th><FaPlaneArrival /> Arrival City</th>
-            <td>{flightInformation.to_city}, {flightInformation.to_country}</td>
-          </tr>
-          <tr>
-            <th><FaClock /> Departure Time</th>
-            <td>{formatDateTime(flightInformation.departure_time)}</td>
-            <th><FaClock /> Arrival Time</th>
-            <td>{formatDateTime(flightInformation.arrival_time)}</td>
-          </tr>
-          <tr>
-            <th><FaClock /> Flight Duration</th>
-            <td>{calculateFlightDuration(flightInformation.departure_time, flightInformation.arrival_time)}</td>
-            <th><FaHashtag /> Flight Number</th>
-            <td>{flightInformation.flight_number || "-"}</td>
-          </tr>
-          <tr>
-            <th><FaMoneyBillWave /> Ticket Price</th>
-            <td>{formatCurrency(flightInformation.price)}</td>
-            <th><FaChair /> Available Seats</th>
-            <td>{flightInformation.seats_available ?? "-"}</td>
-          </tr>
-          <tr>
-            <th><FaBuilding /> Airline Name</th>
-            <td colSpan="3">{flightInformation.airline_name || "-"}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="table-responsive mb-4">
+        <table className="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <th><FaPlaneDeparture /> Departure City</th>
+              <td>{flightInformation.from_city}, {flightInformation.from_country}</td>
+              <th><FaPlaneArrival /> Arrival City</th>
+              <td>{flightInformation.to_city}, {flightInformation.to_country}</td>
+            </tr>
+            <tr>
+              <th><FaClock /> Departure Time</th>
+              <td>{formatDateTime(flightInformation.departure_time)}</td>
+              <th><FaClock /> Arrival Time</th>
+              <td>{formatDateTime(flightInformation.arrival_time)}</td>
+            </tr>
+            <tr>
+              <th><FaClock /> Flight Duration</th>
+              <td>{calculateFlightDuration(flightInformation.departure_time, flightInformation.arrival_time)}</td>
+              <th><FaHashtag /> Flight Number</th>
+              <td>{flightInformation.flight_number || "-"}</td>
+            </tr>
+            <tr>
+              <th><FaMoneyBillWave /> Ticket Price</th>
+              <td>{formatCurrency(flightInformation.price)}</td>
+              <th><FaChair /> Available Seats</th>
+              <td>{flightInformation.seats_available ?? "-"}</td>
+            </tr>
+            <tr>
+              <th><FaBuilding /> Airline Name</th>
+              <td colSpan="3">{flightInformation.airline_name || "-"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       {/* ===== Divider ===== */}
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        margin: "40px 0"
-      }}>
-        <div style={{ flex: 1, height: "1px", background: "#ddd" }} />
-        <span style={{
-          padding: "0 15px",
-          fontWeight: "600",
-          color: "#555",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px"
-        }}>
+      <div className="d-flex align-items-center my-4">
+        <div className="flex-grow-1 border-bottom"></div>
+        <span className="px-3 fw-semibold d-flex align-items-center gap-2">
           <FaUser /> Passenger Bookings
         </span>
-        <div style={{ flex: 1, height: "1px", background: "#ddd" }} />
+        <div className="flex-grow-1 border-bottom"></div>
       </div>
 
       {/* ===== Bookings Table ===== */}
       {flightBookings.length === 0 ? (
-        <div style={{
-          padding: "20px",
-          textAlign: "center",
-          backgroundColor: "#f0f0f0",
-          borderRadius: "8px",
-          fontWeight: "500",
-          color: "#555"
-        }}>
+        <div className="alert alert-info text-center">
           No passengers have booked this flight yet.
         </div>
       ) : (
-        <div style={{ overflowX: "auto" }}>
-          <table
-            border="1"
-            cellPadding="8"
-            style={{ width: "100%", borderCollapse: "collapse", minWidth: "900px" }}
-          >
-            <thead>
+        <div className="table-responsive">
+          <table className="table table-hover table-bordered">
+            <thead className="table-dark">
               <tr>
-                <th><FaUser />   # Number</th>
+                <th>#</th>
                 <th>First Name</th>
-                <th> Last Name</th>
+                <th>Last Name</th>
                 <th><FaPassport /> Passport Number</th>
                 <th>Nationality</th>
                 <th>Age</th>
-                <th><FaEnvelope /> Email Address</th>
-                <th><FaPhone /> Phone Number</th>
+                <th><FaEnvelope /> Email</th>
+                <th><FaPhone /> Phone</th>
                 <th><FaStickyNote /> Notes</th>
                 <th><FaMoneyBillWave /> Total Payment</th>
               </tr>
             </thead>
-
             <tbody>
-              {flightBookings.map((passenger, numList) => (
-                <tr key={passenger.booking_id}>
-                  <td>{numList + 1}</td>
-                
-                  <td>{passenger.first_name || "-"}</td>
-                  <td>{passenger.last_name || "-"}</td>
-                  <td>{passenger.passport_number || "-"}</td>
-                  <td>{passenger.nationality || "-"}</td>
-                  <td>{passenger.age ?? "-"}</td>
-                  <td> {passenger.email || "-"}</td>
-                  <td>{passenger.phone || "-"}</td>
-                  <td>{passenger.notes || "-"}</td>
-                  <td>{formatCurrency(passenger.total_price || passenger.flight_price)}</td>
+              {flightBookings.map((p, index) => (
+                <tr key={p.booking_id}>
+                  <td>{index + 1}</td>
+                  <td>{p.first_name || "-"}</td>
+                  <td>{p.last_name || "-"}</td>
+                  <td>{p.passport_number || "-"}</td>
+                  <td>{p.nationality || "-"}</td>
+                  <td>{p.age ?? "-"}</td>
+                  <td>{p.email || "-"}</td>
+                  <td>{p.phone || "-"}</td>
+                  <td>{p.notes || "-"}</td>
+                  <td>{formatCurrency(p.total_price || p.flight_price)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {/* Print Button */}
+          <div className="text-end mt-3">
+            <button className="btn btn-primary" onClick={handlePrint}>
+              <FaPrint className="me-2" />
+              Print Passengers
+            </button>
+          </div>
         </div>
       )}
     </div>

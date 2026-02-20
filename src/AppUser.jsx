@@ -100,8 +100,9 @@ const UserHandleSignIn = async (formData) => {
         <Route
          path="/user/flights" 
          element={<UserFlights 
-          user={user}/>} 
-          flights={flights}
+          user={user}
+          flights={flights}/>} 
+          
           
           />
 
