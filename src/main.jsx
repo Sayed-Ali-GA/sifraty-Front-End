@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import AppCompanies from './AppCompanies'; // App for Companies. Example links: /111/ or /111/form.
 
 import AppUser from './AppUser';           //  App for Users. Example links: /111/user/home or /111/user/flights. 

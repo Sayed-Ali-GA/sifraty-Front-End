@@ -1,130 +1,143 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
-  FaGlobe,
   FaPlaneDeparture,
   FaPlaneArrival,
-  FaMoneyBillWave,
   FaHashtag,
   FaSuitcase,
   FaWifi,
-  FaBuilding
+  FaBuilding,
+  FaClock,
+  FaChair
 } from "react-icons/fa";
-
-// Import API service to fetch flight data
 import * as TicketService from "../../../services/TicketService";
 
 const FlightDetails = () => {
-
-  // Get flightId from URL (e.g. /flights/5)
   const { flightId } = useParams();
-
-  // State to store flight details
   const [flight, setFlight] = useState(null);
 
-  // Fetch flight details when component loads
   useEffect(() => {
     const fetchFlight = async () => {
       try {
-        // Call backend API to get single flight
         const flightData = await TicketService.show(flightId);
-
         if (!flightData) return;
-
-        // Save flight data in state
         setFlight(flightData);
       } catch (error) {
         console.error("Error fetching flight:", error);
       }
     };
-
     fetchFlight();
-  }, [flightId]); // Runs again if flightId changes
+  }, [flightId]);
 
-  // Show loading message while data is not ready
   if (!flight) {
-    return <p>Loading flight details...</p>;
+    return (
+      <div className="container py-5 text-center">
+        <div className="spinner-border text-primary" role="status"></div>
+      </div>
+    );
   }
 
-  // Function to calculate flight duration (arrival - departure)
   const calculateDuration = (departure, arrival) => {
     const start = new Date(departure);
     const end = new Date(arrival);
-
-    const diffMs = end - start; // Difference in milliseconds
+    const diffMs = end - start;
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
-
     return `${hours}h ${minutes}m`;
   };
 
   return (
-    <div>
+    <div className="container py-5">
 
-      {/* Back button to flights page */}
-      <Link to="/user/flights">← Back</Link>
+      {/* Flight Card */}
+      <div className="card shadow rounded-4">
+        <div className="card-body">
 
-      <h1>Flight Details</h1>
+          {/* Header */}
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+            <div>
+              <h2 className="fw-bold mb-1">{flight.from_city} → {flight.to_city}</h2>
+              <small className="text-muted">  {flight.airline_name}</small>
+            </div>
+            <div className="mt-3 mt-md-0 text-md-end">
+              <h4 className="fw-bold">{flight.price} BHD</h4>
+              <small className="text-muted">Total Price</small>
+            </div>
+          </div>
 
-      {/* Departure location */}
-      <p>
-        <FaGlobe /> <strong>From:</strong> {flight.from_city}, {flight.from_country}
-      </p>
+          {/* Flight Details List */}
+          <ul className="list-group list-group-flush mb-4">
+            <li className="list-group-item d-flex align-items-center">
+              <FaPlaneDeparture className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Departure</small><br />
+                <strong>{new Date(flight.departure_time).toLocaleString()}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaPlaneArrival className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Arrival</small><br />
+                <strong>{new Date(flight.arrival_time).toLocaleString()}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaHashtag className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Flight Number</small><br />
+                <strong>{flight.flight_number}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaChair className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Seats Available</small><br />
+                <strong>{flight.seats_available}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaSuitcase className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Baggage</small><br />
+                <strong>{flight.baggage ? `${flight.baggage} kg` : "Not included"}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaWifi className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">WiFi</small><br />
+                <strong>{flight.wifi ? "Available" : "Not available"}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaBuilding className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Airline</small><br />
+                <strong>{flight.airline_name}</strong>
+              </div>
+            </li>
+            <li className="list-group-item d-flex align-items-center">
+              <FaClock className="text-primary me-3 fs-5" />
+              <div>
+                <small className="text-muted">Duration</small><br />
+                <strong>{calculateDuration(flight.departure_time, flight.arrival_time)}</strong>
+              </div>
+            </li>
+          </ul>
 
-      {/* Arrival location */}
-      <p>
-        <FaGlobe /> <strong>To:</strong> {flight.to_city}, {flight.to_country}
-      </p>
+          {/* Action Buttons */}
+          <div className="d-flex flex-column flex-md-row gap-3">
+            <Link to="/user/flights" className="btn btn-outline-secondary btn-lg flex-fill">
+              Back
+            </Link>
+            <Link to={`/user/flights/${flight.id}/bookings`} className="btn btn-primary btn-lg flex-fill">
+              Book Flight
+            </Link>
+          </div>
 
-      {/* Departure time */}
-      <p>
-        <FaPlaneDeparture /> <strong>Departure:</strong>{" "}
-        {new Date(flight.departure_time).toLocaleString()}
-      </p>
-
-      {/* Arrival time */}
-      <p>
-        <FaPlaneArrival /> <strong>Arrival:</strong>{" "}
-        {new Date(flight.arrival_time).toLocaleString()}
-      </p>
-
-      {/* Calculated flight duration */}
-      <p>
-        <FaPlaneDeparture /> <strong>Flight Duration:</strong>{" "}
-        {calculateDuration(flight.departure_time, flight.arrival_time)}
-      </p>
-
-      {/* Flight number */}
-      <p>
-        <FaHashtag /> <strong>Flight Number:</strong> {flight.flight_number}
-      </p>
-
-      {/* Ticket price */}
-      <p>
-        <FaMoneyBillWave /> <strong>Price:</strong> {flight.price} BHD
-      </p>
-
-      {/* Baggage allowance */}
-      <p>
-        <FaSuitcase /> <strong>Baggage:</strong>{" "}
-        {flight.baggage ? `${flight.baggage} kg` : "Not included"}
-      </p>
-
-      {/* WiFi availability */}
-      <p>
-        <FaWifi /> <strong>WiFi:</strong>{" "}
-        {flight.wifi ? "Available" : "Not available"}
-      </p>
-
-      {/* Airline name */}
-      <p><FaBuilding /> <strong>Airline:</strong> {flight.airline_name}</p>
-
-      {/* Available seats */}
-      <p><strong>Available Seats:</strong> {flight.seats_available}</p>
-
-       <Link to={`/user/flights/${flight.id}/bookings`}><button> Book Now </button></Link>
-
+        </div>
+      </div>
 
     </div>
   );

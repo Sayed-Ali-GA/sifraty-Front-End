@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const UserSignIn = ({ UserHandleSignIn, user }) => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const UserSignIn = ({ UserHandleSignIn, user }) => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -35,64 +37,73 @@ const UserSignIn = ({ UserHandleSignIn, user }) => {
   };
 
   return (
-    <main style={{ maxWidth: "400px", margin: "auto", padding: "2rem" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "1.5rem" }}>User Sign In</h1>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
+        <div className="card-body p-4">
+          <h2 className="text-center mb-4">User Sign In</h2>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          background: "#f9f9f9",
-          padding: "2rem",
-          borderRadius: "8px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
-      >
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-          autoComplete="username"
-          style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc" }}
-        />
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          autoComplete="current-password"
-          style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid #ccc" }}
-        />
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                autoComplete="username"
+              />
+            </div>
 
-        <button
-          type="submit"
-          style={{
-            padding: "0.6rem",
-            borderRadius: "4px",
-            border: "none",
-            backgroundColor: "#222",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Sign In
-        </button>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <div className="input-group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  id="password"
+                  name="password"
+                  placeholder="Enter password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
 
-        {error && <p style={{ color: "red", marginTop: "0.5rem" }}>{error}</p>}
-      </form>
+            <button type="submit" className="btn btn-dark w-100">
+              Sign In
+            </button>
+          </form>
 
-      <p style={{ textAlign: "center", marginTop: "1rem" }}>
-        Don’t have an account? <Link to="/user/sign-up">Sign Up</Link>
-      </p>
-    </main>
+          <p className="text-center mt-3">
+            Don’t have an account? <Link to="/user/sign-up">Sign Up</Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
