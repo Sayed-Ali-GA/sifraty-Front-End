@@ -1,4 +1,3 @@
-// FlightDetailsPage.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -31,7 +30,7 @@ const FlightDetailsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(null);
 
-  // حساب مدة الرحلة
+
   const calculateFlightDuration = (departureTime, arrivalTime) => {
     if (!departureTime || !arrivalTime) return "-";
     const diff = new Date(arrivalTime) - new Date(departureTime);
@@ -48,7 +47,7 @@ const FlightDetailsPage = () => {
   const formatCurrency = (amount) =>
     amount ? `${Number(amount).toFixed(2)} BHD` : "-";
 
-  // جلب بيانات الرحلة والركاب
+
   useEffect(() => {
     const fetchFlightData = async () => {
       try {
@@ -101,7 +100,7 @@ const FlightDetailsPage = () => {
     );
 
   return (
-    <div className="container my-4 pt-5"> {/* pt-5 لإزاحة المحتوى أسفل Navbar */}
+    <div className="container my-4 pt-5"> 
       {/* ===== Back Button Top Right ===== */}
       <div className="d-flex justify-content-end mb-3">
         <button
