@@ -1,0 +1,349 @@
+/* ═══════════════════════════════════════════════════════════
+   HOME COMPANIES - PROFESSIONAL CALM LIGHT THEME
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page ── */
+.home-page {
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  background: #f4f6f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background shapes */
+.home-page::before {
+  content: '';
+  position: fixed;
+  top: -120px; right: -120px;
+  width: 480px; height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,90,155,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.home-page::after {
+  content: '';
+  position: fixed;
+  bottom: -100px; left: -80px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46,139,122,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Logged-in Card ── */
+.home-card {
+  width: 100%;
+  max-width: 620px;
+  background: #ffffff;
+  border: 1px solid #dde3ef;
+  border-radius: 24px;
+  box-shadow: 0 4px 28px rgba(58, 90, 155, 0.09), 0 1px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  animation: fadeUp 0.45s ease both;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Card Header (gradient) ── */
+.home-card-header {
+  background: linear-gradient(135deg, #3a5a9b 0%, #2e8b7a 100%);
+  padding: 40px 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.home-card-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 22px 22px 0 0;
+}
+
+/* Company Logo in header */
+.home-company-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.32);
+  padding: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-company-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.8);
+  position: relative;
+  z-index: 1;
+}
+
+.home-welcome-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.home-welcome-sub {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.72);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Card Body ── */
+.home-card-body {
+  padding: 32px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* Stats Row */
+.home-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.home-stat {
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.home-stat:hover {
+  background: #eef2fa;
+  border-color: #b0bcd8;
+  transform: translateY(-2px);
+}
+
+.home-stat-icon {
+  font-size: 1.3rem;
+  color: #3a5a9b;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-stat-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a2a4a;
+  line-height: 1;
+}
+
+.home-stat-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9aaac4;
+  margin-top: 3px;
+}
+
+/* Divider */
+.home-divider {
+  width: 100%;
+  height: 1px;
+  background: #dde3ef;
+}
+
+/* Actions */
+.home-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.home-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: #3a5a9b;
+  border: 1px solid #3a5a9b;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-btn-primary:hover {
+  background: #2e4a85;
+  border-color: #2e4a85;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(58, 90, 155, 0.25);
+}
+
+.home-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  color: #3d4f6e;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-btn-secondary:hover {
+  background: #eef2fa;
+  border-color: #b0bcd8;
+  color: #3a5a9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(58, 90, 155, 0.1);
+}
+
+/* ══════════════════════════════════════════
+   GUEST (not logged in) Card
+   ══════════════════════════════════════════ */
+.home-guest-card {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid #dde3ef;
+  border-radius: 24px;
+  box-shadow: 0 4px 28px rgba(58, 90, 155, 0.09), 0 1px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  animation: fadeUp 0.45s ease both;
+  position: relative;
+  z-index: 1;
+}
+
+.home-guest-header {
+  background: linear-gradient(135deg, #3a5a9b 0%, #2e8b7a 100%);
+  padding: 36px 32px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.home-guest-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 22px 22px 0 0;
+}
+
+.home-guest-plane {
+  font-size: 2.8rem;
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.home-guest-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.home-guest-sub {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.72);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.home-guest-body {
+  padding: 28px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-guest-desc {
+  font-size: 0.875rem;
+  color: #6b7fa3;
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.home-guest-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.home-guest-actions .home-btn-primary,
+.home-guest-actions .home-btn-secondary {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 500px) {
+  .home-card-header,
+  .home-card-body   { padding-left: 24px; padding-right: 24px; }
+  .home-stats       { grid-template-columns: 1fr 1fr; }
+  .home-actions     { flex-direction: column; }
+  .home-btn-primary,
+  .home-btn-secondary { justify-content: center; }
+  .home-guest-body  { padding: 24px; }
+  .home-guest-actions { flex-direction: column; }
+}

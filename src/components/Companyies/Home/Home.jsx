@@ -1,65 +1,101 @@
 import { Link } from "react-router-dom";
+import { FaBuilding, FaPlaneDeparture, FaList, FaPlus, FaGlobe } from "react-icons/fa";
+import { MdFlightTakeoff } from "react-icons/md";
+import "./Home.css";
 
-const HomeCompanyies = ({ company }) => {
+const HomeCompanyies = ({ company, flights = [] }) => {
   return (
-    <main
-      className="container py-5"
-      style={{ paddingTop: "1000px", minHeight: "950vh" }} 
-    >
+    <main className="home-page">
 
       {company ? (
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
 
-            <div className="p-5 shadow rounded-4 bg-light text-center">
-              <h1 className="fw-bold mb-3 d-flex align-items-center justify-content-center">
-                {company.logo && (
-                  <img
-                    src={company.logo}
-                    alt="Company Logo"
-                    width="50%"
-                    height="50%"
-                    className="me-2"
-                  />
-                )}
-              </h1>
-              <h1>  
-                Welcome, {company.name || "Your Company"}
-              </h1>
+        /* ══════════════════ LOGGED IN ══════════════════ */
+        <div className="home-card">
 
-              <p className="lead mb-4 text-muted">
-                Manage your flights and post new trips for travelers.
-              </p>
+          {/* Header */}
+          <div className="home-card-header">
+            {company.logo ? (
+              <img
+                src={company.logo}
+                alt={`${company.name} logo`}
+                className="home-company-logo"
+              />
+            ) : (
+              <div className="home-company-icon">
+                <FaBuilding />
+              </div>
+            )}
+            <h1 className="home-welcome-title">
+              Welcome, {company.name || "Your Company"}
+            </h1>
+            <p className="home-welcome-sub">
+              Manage and publish flights for travelers
+            </p>
+          </div>
 
-              <div className="d-flex justify-content-center gap-3 flex-wrap">
-                <Link to="/flights/new" className="btn btn-dark btn-lg px-4">
-                  Post New Flight +
-                </Link>
+          {/* Body */}
+          <div className="home-card-body">
 
-                <Link to="/flights" className="btn btn-outline-dark btn-lg px-4">
-                  Browse Flights
-                </Link>
+            {/* Quick Stats */}
+            <div className="home-stats">
+              <div className="home-stat">
+                <div className="home-stat-icon"><MdFlightTakeoff /></div>
+                <div className="home-stat-value">{flights.length}</div>
+                <div className="home-stat-label">Flights</div>
+              </div>
+              <div className="home-stat">
+                <div className="home-stat-icon"><FaGlobe /></div>
+                <div className="home-stat-value">
+                  {new Set(flights.map(f => f.to_country).filter(Boolean)).size}
+                </div>
+                <div className="home-stat-label">Destinations</div>
               </div>
             </div>
 
+            <div className="home-divider" />
+
+            {/* Actions */}
+            <div className="home-actions">
+              <Link to="/flights/new" className="home-btn-primary">
+                <FaPlus /> Post New Flight
+              </Link>
+              <Link to="/flights" className="home-btn-secondary">
+                <FaList /> Browse Flights
+              </Link>
+            </div>
+
           </div>
         </div>
+
       ) : (
-        <div className="row justify-content-center text-center">
-          <div className="col-lg-6">
-            <div className="p-5 shadow rounded-4 bg-light">
-              <h1 className="fw-bold mb-3">Welcome to Sifraty</h1>
 
-              <p className="lead text-muted">
-                Please sign in or create a company account to manage flights.
-              </p>
+        /* ══════════════════ GUEST ══════════════════ */
+        <div className="home-guest-card">
 
-              <Link to="/sign-in" className="btn btn-dark mt-3 px-4">
-                Sign In
+          <div className="home-guest-header">
+            <div className="home-guest-plane"><MdFlightTakeoff /></div>
+            <h1 className="home-guest-title">Welcome to Sifraty</h1>
+            <p className="home-guest-sub">The airline company management portal</p>
+          </div>
+
+          <div className="home-guest-body">
+            <p className="home-guest-desc">
+              Sign in or create a company account to manage your flights
+              and publish trips for travelers worldwide.
+            </p>
+
+            <div className="home-guest-actions">
+              <Link to="/sign-in" className="home-btn-primary">
+                <FaPlaneDeparture /> Sign In
+              </Link>
+              <Link to="/sign-up" className="home-btn-secondary">
+                Sign Up
               </Link>
             </div>
           </div>
+
         </div>
+
       )}
     </main>
   );

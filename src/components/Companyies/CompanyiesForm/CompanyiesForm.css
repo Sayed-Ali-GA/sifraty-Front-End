@@ -1,0 +1,459 @@
+/* ═══════════════════════════════════════════════════════════
+   COMPANIES FORM - PROFESSIONAL CALM LIGHT THEME
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Page ── */
+.cf-page {
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  background: #f4f6f9;
+  padding: 100px 20px 60px;
+}
+
+.cf-wrapper {
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+/* ── Page Header ── */
+.cf-page-header {
+  margin-bottom: 28px;
+  animation: fadeUp 0.35s ease both;
+}
+
+.cf-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #9aaac4;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.cf-breadcrumb span:last-child {
+  color: #3a5a9b;
+  font-weight: 600;
+}
+
+.cf-page-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a2a4a;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.cf-page-header p {
+  font-size: 0.875rem;
+  color: #6b7fa3;
+  margin: 0;
+}
+
+/* ── Main Card ── */
+.cf-card {
+  background: #ffffff;
+  border: 1px solid #dde3ef;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(58, 90, 155, 0.07), 0 1px 4px rgba(0,0,0,0.04);
+  overflow: hidden;
+  animation: fadeUp 0.4s ease 0.05s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Card Header ── */
+.cf-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid #dde3ef;
+  background: #fafbfd;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cf-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cf-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: #eef2fa;
+  border: 1px solid #c5d2ee;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #3a5a9b;
+  letter-spacing: 0.03em;
+}
+
+.cf-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3d4f6e;
+}
+
+.cf-step-note {
+  font-size: 0.72rem;
+  color: #9aaac4;
+  font-style: italic;
+}
+
+/* ── Form Body ── */
+.cf-form-body {
+  padding: 28px;
+}
+
+/* ── Section ── */
+.cf-section {
+  margin-bottom: 28px;
+}
+
+.cf-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9aaac4;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #dde3ef;
+}
+
+/* ── Grids ── */
+.cf-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.cf-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── Field ── */
+.cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cf-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3d4f6e;
+}
+
+.cf-label-req::after {
+  content: '*';
+  color: #b94050;
+  font-size: 0.7rem;
+  margin-left: 1px;
+}
+
+.cf-label svg {
+  color: #6b7fa3;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* ── Input ── */
+.cf-input {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  color: #1a2a4a;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 10px;
+  padding: 9px 13px;
+  transition: all 0.2s ease;
+  outline: none;
+  width: 100%;
+}
+
+.cf-input::placeholder { color: #b0bcd8; }
+
+.cf-input:hover {
+  border-color: #b0bcd8;
+}
+
+.cf-input:focus {
+  background: #ffffff;
+  border-color: #3a5a9b;
+  box-shadow: 0 0 0 3px rgba(58, 90, 155, 0.1);
+}
+
+/* ── React Select ── */
+.cf-select .react-select__control {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  border: 1px solid #dde3ef;
+  border-radius: 10px;
+  background: #f7f8fc;
+  min-height: 40px;
+  box-shadow: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.cf-select .react-select__control:hover {
+  border-color: #b0bcd8;
+}
+
+.cf-select .react-select__control--is-focused {
+  border-color: #3a5a9b !important;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(58, 90, 155, 0.1) !important;
+}
+
+.cf-select .react-select__placeholder {
+  color: #b0bcd8;
+  font-size: 0.875rem;
+}
+
+.cf-select .react-select__single-value {
+  color: #1a2a4a;
+  font-weight: 500;
+}
+
+.cf-select .react-select__input-container {
+  color: #1a2a4a;
+}
+
+.cf-select .react-select__menu {
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(58, 90, 155, 0.12);
+  overflow: hidden;
+  font-size: 0.875rem;
+  z-index: 100;
+}
+
+.cf-select .react-select__menu-list {
+  padding: 6px;
+  max-height: 200px;
+}
+
+.cf-select .react-select__option {
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #3d4f6e;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cf-select .react-select__option--is-focused {
+  background: #eef2fa;
+  color: #3a5a9b;
+}
+
+.cf-select .react-select__option--is-selected {
+  background: #3a5a9b;
+  color: #ffffff;
+}
+
+.cf-select .react-select__indicator-separator { background: #dde3ef; }
+
+.cf-select .react-select__dropdown-indicator,
+.cf-select .react-select__clear-indicator {
+  color: #9aaac4;
+  transition: color 0.2s;
+}
+
+.cf-select .react-select__dropdown-indicator:hover,
+.cf-select .react-select__clear-indicator:hover {
+  color: #3a5a9b;
+}
+
+/* ── WiFi Toggle Field ── */
+.cf-wifi-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.cf-wifi-field:hover {
+  background: #eef1f8;
+  border-color: #b0bcd8;
+}
+
+.cf-wifi-field.active {
+  background: #eef2fa;
+  border-color: #3a5a9b;
+}
+
+.cf-wifi-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cf-wifi-info svg {
+  font-size: 1.1rem;
+  color: #3a5a9b;
+  flex-shrink: 0;
+}
+
+.cf-wifi-info strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a2a4a;
+  line-height: 1.2;
+}
+
+.cf-wifi-info span {
+  font-size: 0.75rem;
+  color: #9aaac4;
+}
+
+/* Toggle switch */
+.cf-toggle {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cf-toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cf-toggle-track {
+  display: block;
+  width: 44px;
+  height: 24px;
+  background: #dde3ef;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.25s ease;
+  cursor: pointer;
+}
+
+.cf-toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: transform 0.25s ease;
+}
+
+.cf-toggle input:checked + .cf-toggle-track {
+  background: #3a5a9b;
+}
+
+.cf-toggle input:checked + .cf-toggle-track::after {
+  transform: translateX(20px);
+}
+
+/* ── Divider ── */
+.cf-divider {
+  height: 1px;
+  background: #dde3ef;
+  margin: 8px 0 24px;
+}
+
+/* ── Actions ── */
+.cf-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.cf-btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 10px;
+  color: #6b7fa3;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cf-btn-cancel:hover {
+  background: #eef1f8;
+  border-color: #b0bcd8;
+  color: #3d4f6e;
+}
+
+.cf-btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 26px;
+  background: #3a5a9b;
+  border: 1px solid #3a5a9b;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cf-btn-submit:hover {
+  background: #2e4a85;
+  border-color: #2e4a85;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(58, 90, 155, 0.25);
+}
+
+.cf-btn-submit:active {
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .cf-form-body  { padding: 20px 16px; }
+  .cf-grid-2,
+  .cf-grid-3     { grid-template-columns: 1fr; }
+  .cf-actions    { flex-direction: column-reverse; }
+  .cf-btn-cancel,
+  .cf-btn-submit { width: 100%; justify-content: center; }
+}

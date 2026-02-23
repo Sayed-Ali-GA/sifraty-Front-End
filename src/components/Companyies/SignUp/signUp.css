@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════════════════════
+   SIGN UP - EXTENDS SignIn.css  (import both)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Wider card for signup */
+.signup-card {
+  max-width: 500px;
+}
+
+/* ── Section Label ── */
+.signup-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9aaac4;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signup-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #dde3ef;
+}
+
+/* ── Optional label ── */
+.signup-optional {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #9aaac4;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+/* ── Logo Upload Zone ── */
+.signup-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px 16px;
+  background: #f7f8fc;
+  border: 1.5px dashed #b0bcd8;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  position: relative;
+}
+
+.signup-upload-zone:hover {
+  background: #eef2fa;
+  border-color: #3a5a9b;
+}
+
+.signup-upload-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.signup-upload-icon {
+  font-size: 1.3rem;
+  color: #6b7fa3;
+  transition: color 0.2s;
+}
+
+.signup-upload-zone:hover .signup-upload-icon {
+  color: #3a5a9b;
+}
+
+.signup-upload-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #3d4f6e;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signup-upload-hint {
+  font-size: 0.7rem;
+  color: #9aaac4;
+}

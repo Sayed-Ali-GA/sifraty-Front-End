@@ -1,200 +1,173 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FaBuilding, FaUserPlus, FaUpload } from "react-icons/fa";
+
+import "./signUp.css";
+
+const FIELDS = [
+  { name: "employee_username", label: "Employee Username", type: "text",  placeholder: "e.g. john_doe",          required: true  },
+  { name: "name",              label: "Company Name",      type: "text",  placeholder: "e.g. Gulf Airways",       required: true  },
+  { name: "email",             label: "Email Address",     type: "email", placeholder: "company@example.com",     required: true  },
+  { name: "phone",             label: "Phone Number",      type: "text",  placeholder: "+973 3300 0000",           required: true  },
+  { name: "license",           label: "License Number",    type: "text",  placeholder: "e.g. BH-2024-AIR-001",    required: true  },
+];
 
 const SignUp = ({ handleSignUp, company }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    employee_username: "",
-    password: "",
-    passwordConf: "",
-    name: "",
-    email: "",
-    phone: "",
-    license: "",
-    logo: null
+    employee_username: "", password: "", passwordConf: "",
+    name: "", email: "", phone: "", license: "", logo: null,
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError]               = useState(null);
 
   useEffect(() => {
     if (company) navigate("/");
   }, [company, navigate]);
 
-  // ================= Handlers =================
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0])
       setFormData(prev => ({ ...prev, logo: e.target.files[0] }));
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
     if (formData.password !== formData.passwordConf) {
-      setError("Passwords must match");
-      return;
+      setError("Passwords do not match"); return;
     }
-
     try {
       const result = await handleSignUp(formData);
-      if (result.success) {
-        navigate("/");
-      } else {
-        setError(result.message || "Sign Up failed");
-      }
+      result.success ? navigate("/") : setError(result.message || "Sign Up failed");
     } catch (err) {
       setError(err.message || "Something went wrong");
     }
   };
 
-  // ================= Render =================
   return (
-    <main className="container" style={{ maxWidth: "500px", marginTop: "3rem" }}>
-      <h1 className="text-center mb-4">Company Sign Up</h1>
+    <main className="auth-page">
+      <div className="auth-card signup-card">
 
-      <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-        {/* Employee Username */}
-        <div className="mb-3">
-          <label htmlFor="employee_username" className="form-label">Employee Username</label>
-          <input
-            type="text"
-            className="form-control"
-            id="employee_username"
-            name="employee_username"
-            value={formData.employee_username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Company Name */}
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Company Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Email */}
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Phone */}
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">Phone</label>
-          <input
-            type="text"
-            className="form-control"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* License */}
-        <div className="mb-3">
-          <label htmlFor="license" className="form-label">License</label>
-          <input
-            type="text"
-            className="form-control"
-            id="license"
-            name="license"
-            value={formData.license}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        {/* Password */}
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <div className="input-group">
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => setShowPassword(prev => !prev)}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
+        {/* ── Banner ── */}
+        <div className="auth-card-banner">
+          <div className="auth-banner-icon">
+            <FaBuilding />
           </div>
+          <h1>Create Company Account</h1>
+          <p>Fill in your details to get started</p>
         </div>
 
-        {/* Confirm Password */}
-        <div className="mb-3">
-          <label htmlFor="passwordConf" className="form-label">Confirm Password</label>
-          <input
-            type={showPassword ? "text" : "password"}
-            className="form-control"
-            id="passwordConf"
-            name="passwordConf"
-            value={formData.passwordConf}
-            onChange={handleChange}
-            required
-          />
+        {/* ── Form ── */}
+        <div className="auth-form-body">
+          <form onSubmit={handleSubmit} noValidate>
+
+            {/* ── Company Info Section ── */}
+            <div className="signup-section-label">Company Information</div>
+
+            {FIELDS.map(({ name, label, type, placeholder, required }) => (
+              <div className="auth-field" key={name}>
+                <label htmlFor={name} className="auth-label">{label}</label>
+                <input
+                  type={type}
+                  id={name}
+                  name={name}
+                  className="auth-input"
+                  value={formData[name]}
+                  onChange={handleChange}
+                  placeholder={placeholder}
+                  required={required}
+                  autoComplete={name === "email" ? "email" : "off"}
+                />
+              </div>
+            ))}
+
+            {/* ── Logo Upload ── */}
+            <div className="auth-field">
+              <label className="auth-label">Company Logo <span className="signup-optional">(optional)</span></label>
+              <label className="signup-upload-zone" htmlFor="logo">
+                <FaUpload className="signup-upload-icon" />
+                <span className="signup-upload-text">
+                  {formData.logo ? formData.logo.name : "Click to upload logo"}
+                </span>
+                <span className="signup-upload-hint">PNG, JPG up to 5MB</span>
+                <input
+                  type="file" id="logo" name="logo"
+                  accept="image/*" onChange={handleFileChange}
+                  className="signup-upload-input"
+                />
+              </label>
+            </div>
+
+            {/* ── Security Section ── */}
+            <div className="signup-section-label" style={{ marginTop: 20 }}>Security</div>
+
+            {/* Password */}
+            <div className="auth-field">
+              <label htmlFor="password" className="auth-label">Password</label>
+              <div className="auth-input-group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password" name="password"
+                  className="auth-input"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Create a strong password"
+                  required
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="auth-toggle-btn"
+                  onClick={() => setShowPassword(p => !p)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="auth-field">
+              <label htmlFor="passwordConf" className="auth-label">Confirm Password</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="passwordConf" name="passwordConf"
+                className="auth-input"
+                value={formData.passwordConf}
+                onChange={handleChange}
+                placeholder="Repeat your password"
+                required
+                autoComplete="new-password"
+              />
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="auth-alert auth-alert-error" role="alert">
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button type="submit" className="auth-btn-submit" style={{ marginTop: 8 }}>
+              <FaUserPlus />
+              Create Account
+            </button>
+
+          </form>
+
+          <p className="auth-footer-text">
+            Already have an account?{" "}
+            <Link to="/sign-in">Sign In</Link>
+          </p>
         </div>
 
-        {/* Logo Upload */}
-        <div className="mb-3">
-          <label htmlFor="logo" className="form-label">Company Logo (optional)</label>
-          <input
-            type="file"
-            className="form-control"
-            id="logo"
-            name="logo"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          {formData.logo && (
-            <small className="form-text text-muted mt-1">
-              Selected file: {formData.logo.name}
-            </small>
-          )}
-        </div>
-
-        {/* Error */}
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        {/* Submit */}
-        <button type="submit" className="btn btn-dark w-100">Sign Up</button>
-      </form>
-
-      <p className="text-center mt-3">
-        Already have an account? <Link to="/sign-in">Sign In</Link>
-      </p>
+      </div>
     </main>
   );
 };

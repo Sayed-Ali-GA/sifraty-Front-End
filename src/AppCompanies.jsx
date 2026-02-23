@@ -79,12 +79,15 @@ function AppCompanies() {
     navigate("/flights");
   };
 
-  const handleDeleteFlight = async (id) => {
-    if (window.confirm("Are you sure you want to delete this flight?")) {
-      await TicketService.deleteFlight(id);
-      loadFlights();
-    }
-  };
+const handleDeleteFlight = async (id) => {
+  try {
+    await TicketService.deleteFlight(id);
+    loadFlights();
+  } catch (error) {
+    console.error("Delete failed:", error);
+  }
+};
+
 
   // ====== Profile Update ======
 const handleProfileUpdate = async (formData) => {
@@ -105,7 +108,7 @@ const handleProfileUpdate = async (formData) => {
 
       <Routes>
         {/* Home */}
-        <Route path="/" element={<HomeCompanyies company={company} />} />
+        <Route path="/" element={<HomeCompanyies company={company} flights={flights}/>} />
 
         {/* Auth */}
         <Route path="/sign-up" element={<SignUp handleSignUp={handleSignUp} company={company} />} />

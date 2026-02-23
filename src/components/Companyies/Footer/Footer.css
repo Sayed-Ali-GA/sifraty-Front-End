@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════════════════════
+   COMPANY FOOTER - PROFESSIONAL CALM LIGHT THEME
+   ═══════════════════════════════════════════════════════════ */
+
+.cf-footer {
+  font-family: 'Sora', sans-serif;
+  background: #ffffff;
+  border-top: 1px solid #dde3ef;
+  padding: 40px 24px 28px;
+}
+
+.cf-footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ── Brand ── */
+.cf-footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.cf-footer-brand img {
+  height: 36px;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.cf-footer-brand:hover img {
+  opacity: 1;
+}
+
+.cf-footer-brand-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3a5a9b;
+}
+
+/* ── Nav Links ── */
+.cf-footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cf-footer-nav li a {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #6b7fa3;
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.cf-footer-nav li a:hover {
+  background: #eef2fa;
+  color: #3a5a9b;
+}
+
+/* ── Divider ── */
+.cf-footer-divider {
+  width: 100%;
+  height: 1px;
+  background: #dde3ef;
+}
+
+/* ── Social Icons ── */
+.cf-footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #dde3ef;
+  background: #f7f8fc;
+  color: #6b7fa3;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cf-footer-social-link:hover {
+  background: #eef2fa;
+  border-color: #3a5a9b;
+  color: #3a5a9b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(58, 90, 155, 0.12);
+}
+
+/* ── Bottom Copyright ── */
+.cf-footer-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #9aaac4;
+}
+
+.cf-footer-bottom strong {
+  color: #3a5a9b;
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .cf-footer { padding: 32px 16px 24px; }
+}
