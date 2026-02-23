@@ -1,0 +1,248 @@
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR COMPANIES - PROFESSIONAL CALM LIGHT THEME
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Navbar Base ── */
+.navbar-companies {
+  font-family: 'Sora', sans-serif;
+  background: #ffffff !important;
+  border-bottom: 1px solid #dde3ef;
+  box-shadow: 0 2px 16px rgba(58, 90, 155, 0.07);
+  padding: 0 0;
+  height: 68px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Brand / Logo ── */
+.navbar-companies .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a2a4a !important;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.navbar-companies .navbar-brand:hover {
+  opacity: 0.8;
+}
+
+.navbar-companies .brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #eef2fa;
+  padding: 5px;
+  border: 1px solid #dde3ef;
+}
+
+.navbar-companies .brand-name {
+  color: #3a5a9b;
+}
+
+/* ── Toggler ── */
+.navbar-companies .navbar-toggler {
+  border: 1px solid #dde3ef;
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: all 0.2s;
+}
+
+.navbar-companies .navbar-toggler:focus {
+  box-shadow: 0 0 0 3px rgba(58, 90, 155, 0.12);
+}
+
+.navbar-companies .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%233a5a9b' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ── Nav Links ── */
+.navbar-companies .nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7fa3 !important;
+  padding: 6px 14px !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.navbar-companies .nav-link:hover {
+  color: #3a5a9b !important;
+  background: #eef2fa;
+}
+
+.navbar-companies .nav-link.active {
+  color: #3a5a9b !important;
+  background: #eef2fa;
+  font-weight: 600;
+}
+
+/* Active underline dot */
+.navbar-companies .nav-link.active::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #3a5a9b;
+  margin: 2px auto 0;
+}
+
+/* ── Divider between nav groups ── */
+.navbar-companies .nav-divider {
+  width: 1px;
+  height: 20px;
+  background: #dde3ef;
+  margin: 0 8px;
+  align-self: center;
+}
+
+/* ── Company Badge (shown when logged in) ── */
+.navbar-companies .company-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 8px;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #3d4f6e;
+  margin-right: 4px;
+}
+
+.navbar-companies .company-badge img {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.navbar-companies .company-badge .badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2e7d5e;
+  flex-shrink: 0;
+}
+
+/* ── Logout Button ── */
+.navbar-companies .btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: #fdf1f3;
+  border: 1px solid #f0c4cb;
+  border-radius: 9px;
+  color: #b94050;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navbar-companies .btn-logout:hover {
+  background: #fce4e8;
+  border-color: #b94050;
+  color: #9c2d3c;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(185, 64, 80, 0.12);
+}
+
+/* ── Sign In Link ── */
+.navbar-companies .btn-signin {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  background: transparent;
+  border: 1px solid #dde3ef;
+  border-radius: 9px;
+  color: #6b7fa3;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navbar-companies .btn-signin:hover {
+  background: #eef2fa;
+  border-color: #b0bcd8;
+  color: #3a5a9b;
+}
+
+/* ── Sign Up Button ── */
+.navbar-companies .btn-signup {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 18px;
+  background: #3a5a9b;
+  border: 1px solid #3a5a9b;
+  border-radius: 9px;
+  color: #ffffff !important;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navbar-companies .btn-signup:hover {
+  background: #2e4a85;
+  border-color: #2e4a85;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(58, 90, 155, 0.25);
+}
+
+/* ── Mobile Collapse ── */
+@media (max-width: 991px) {
+  .navbar-companies .navbar-collapse {
+    background: #ffffff;
+    border-top: 1px solid #dde3ef;
+    margin-top: 10px;
+    padding: 12px 0 16px;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 8px 20px rgba(58, 90, 155, 0.08);
+  }
+
+  .navbar-companies .nav-link {
+    padding: 8px 16px !important;
+    border-radius: 0;
+  }
+
+  .navbar-companies .nav-link:hover {
+    border-radius: 8px;
+  }
+
+  .navbar-companies .nav-divider {
+    display: none;
+  }
+
+  .navbar-companies .ms-lg-2 {
+    margin-top: 8px;
+    padding: 0 16px;
+  }
+
+  .navbar-companies .btn-logout,
+  .navbar-companies .btn-signin,
+  .navbar-companies .btn-signup {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navbar-companies .company-badge {
+    margin: 8px 16px 4px;
+    justify-content: center;
+  }
+}

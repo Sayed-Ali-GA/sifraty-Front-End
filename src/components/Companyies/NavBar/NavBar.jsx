@@ -1,24 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 import logo from "../../../assets/Logo-sifraty.png";
+import "./NavBar.css";
 
 const NavBarCompanyies = ({ company, handleLogout }) => {
+  const { pathname } = useLocation();
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav className="navbar navbar-expand-lg fixed-top navbar-companies">
       <div className="container">
 
-        {/* Logo */}
-        <Link className="navbar-brand d-flex align-items-center" to="/">
+        {/* ── Brand ── */}
+        <Link className="navbar-brand" to="/">
           <img
             src={logo}
-            alt="Logo"
-            width="35"
-            height="35"
-            className="me-2"
+            alt="Sfraty Logo"
+            className="brand-logo"
           />
-          Sfraty
+          <span className="brand-name">Sfraty</span>
         </Link>
 
-        {/* Toggle Button */}
+        {/* ── Mobile Toggle ── */}
         <button
           className="navbar-toggler"
           type="button"
@@ -31,35 +33,57 @@ const NavBarCompanyies = ({ company, handleLogout }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Links */}
+        {/* ── Links ── */}
         <div className="collapse navbar-collapse" id="navbarCompany">
-          <ul className="navbar-nav ms-auto">
+          <ul className="navbar-nav ms-auto align-items-lg-center gap-1">
 
             {company ? (
               <>
+                {/* Company badge */}
+                <li className="nav-item d-none d-lg-flex">
+                  <div className="company-badge">
+                    {company.logo && (
+                      <img src={company.logo} alt={company.name} />
+                    )}
+                    <span className="badge-dot" />
+                    {company.name}
+                  </div>
+                </li>
+
                 <li className="nav-item">
-                  <Link className="nav-link" to="/flights">
+                  <div className="nav-divider d-none d-lg-block" />
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${pathname === "/flights" ? "active" : ""}`}
+                    to="/flights"
+                  >
                     Flights
                   </Link>
                 </li>
 
                 <li className="nav-item">
-                  <Link className="nav-link" to="/flights/new">
+                  <Link
+                    className={`nav-link ${pathname === "/flights/new" ? "active" : ""}`}
+                    to="/flights/new"
+                  >
                     Add Flight
                   </Link>
                 </li>
 
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile">
+                  <Link
+                    className={`nav-link ${pathname === "/profile" ? "active" : ""}`}
+                    to="/profile"
+                  >
                     Profile
                   </Link>
                 </li>
 
                 <li className="nav-item ms-lg-2">
-                  <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={handleLogout}
-                  >
+                  <button className="btn-logout" onClick={handleLogout}>
+                    <FaSignOutAlt />
                     Logout
                   </button>
                 </li>
@@ -67,13 +91,13 @@ const NavBarCompanyies = ({ company, handleLogout }) => {
             ) : (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/sign-in">
+                  <Link className="btn-signin" to="/sign-in">
                     Sign In
                   </Link>
                 </li>
 
                 <li className="nav-item ms-lg-2">
-                  <Link className="btn btn-primary btn-sm" to="/sign-up">
+                  <Link className="btn-signup" to="/sign-up">
                     Sign Up
                   </Link>
                 </li>
@@ -82,6 +106,7 @@ const NavBarCompanyies = ({ company, handleLogout }) => {
 
           </ul>
         </div>
+
       </div>
     </nav>
   );
