@@ -2,124 +2,166 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { allFlights } from "../../../services/TicketService";
 import {
-  FaPlaneDeparture,
-  FaPlaneArrival,
-  FaMoneyBillWave,
-  FaHashtag,
-  FaCity,
-  FaBuilding,
+  FaPlaneDeparture, FaPlaneArrival,
+  FaMoneyBillWave, FaHashtag, FaBuilding, FaArrowRight,
 } from "react-icons/fa";
+import { MdFlightTakeoff } from "react-icons/md";
+import "./Flights.css";
 
 function UserFlights({ user }) {
   const [flights, setFlights] = useState([]);
 
   useEffect(() => {
-    const loadAllFlights = async () => {
-      const data = await allFlights();
-      setFlights(data || []);
-    };
-    loadAllFlights();
+    allFlights().then(data => setFlights(data || []));
   }, []);
 
+  /* ── Guest State ── */
   if (!user) {
     return (
-      <div className="container py-5">
-        <div className="card shadow-sm rounded-4 text-center p-5">
-          <h3 className="mb-4">Please sign in to access this page</h3>
-          <div className="d-flex justify-content-center gap-3">
-            <Link to="/user/sign-in" className="btn btn-primary">
-              Sign In
-            </Link>
-            <Link to="/user/sign-up" className="btn btn-outline-primary">
-              Sign Up
-            </Link>
+      <div className="uf-page">
+        <div className="uf-state-wrap">
+          <div className="uf-state-card">
+            <div className="uf-state-banner">
+              <div className="banner-icon"><MdFlightTakeoff /></div>
+              <h3>Sign in to Browse Flights</h3>
+            </div>
+            <div className="uf-state-body">
+              <p>Create an account or sign in to explore available flights and book your next trip.</p>
+              <div className="uf-state-actions">
+                <Link to="/user/sign-in" className="uf-btn-view">Sign In</Link>
+                <Link to="/user/sign-up" className="uf-btn-outline">Sign Up</Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
+  /* ── Empty State ── */
   if (flights.length === 0) {
     return (
-      <div className="container py-5 text-center">
-        <h5 className="text-muted">No flights available.</h5>
+      <div className="uf-page">
+        <div className="uf-empty">
+          <MdFlightTakeoff />
+          <p>No flights available at the moment.</p>
+        </div>
       </div>
     );
   }
 
+  /* ── Main ── */
   return (
-    <div className="container py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-0">Available Flights</h2>
+    <div className="uf-page">
+      <div className="container-fluid px-0">
+
+        {/* Page Header */}
+        <div className="uf-page-header">
+          <h2>Available Flights</h2>
+          <p>Browse and book from our latest listings</p>
+          <span className="uf-flight-count">
+            <MdFlightTakeoff /> {flights.length} flights found
+          </span>
+        </div>
+
+        {/* Grid */}
+        <div className="uf-grid">
+          {flights.map((flight) => (
+            <Link
+              key={flight.id}
+              to={`/user/flights/${flight.id}`}
+              className="uf-card-link"
+            >
+              <div className="uf-card">
+
+                {/* ── Top: airline + flight number ── */}
+               <div className="uf-card-top">
+                 <span className="uf-flight-badge">
+                  <FaHashtag />
+                    {flight.flight_number}
+                  </span>
+
+                        {flight.airline_logo ? (
+                 <div className="uf-airline-wrap">
+                      <span className="uf-airline-name">
+                              {flight.airline_name}
+                      </span>
+                 <img
+                   src={flight.airline_logo}
+                   alt={flight.airline_name}
+                   className="uf-airline-logo"
+                  />
+
+                </div>
+          ) : (
+            <span className="uf-airline-name">
+             <FaBuilding style={{ marginRight: 4 }} />
+              {flight.airline_name || "Airline"}
+            </span>
+          )}
       </div>
 
-      <div className="row g-4">
-        {flights.map((flight) => (
-          <div key={flight.id} className="col-md-6 col-lg-4">
-            <Link to={`/user/flights/${flight.id}`} className="text-decoration-none">
-              <div className="card h-100 shadow-sm rounded-4 border-0">
-                <div className="card-body d-flex flex-column">
 
-                  {/* Airline Logo */}
-                  {flight.airline_logo && (
-                    <div className="text-center mb-3">
-                      <img
-                        src={flight.airline_logo}
-                        alt={`${flight.airline_name} Logo`}
-                        className="img-fluid"
-                        style={{ maxHeight: "50px" }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Flight Header */}
-                  <h6 className="fw-bold mb-2">
-                    <FaHashtag className="me-2 text-primary" />
-                    {flight.flight_number}
-                  </h6>
-
-                  <p className="mb-1 text-muted">
-                    <FaBuilding className="me-2" />
-                    {flight.airline_name}
-                  </p>
-
-                  {/* Route */}
-                  <p className="mb-1">
-                    <FaCity className="me-2 text-primary" />
-                    {flight.from_city} → {flight.to_city}
-                  </p>
-
-                  {/* Times */}
-                  <p className="mb-1 small text-muted">
-                    <FaPlaneDeparture className="me-2" />
-                    {new Date(flight.departure_time).toLocaleString()}
-                  </p>
-
-                  <p className="mb-3 small text-muted">
-                    <FaPlaneArrival className="me-2" />
-                    {new Date(flight.arrival_time).toLocaleString()}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mt-auto d-flex justify-content-between align-items-center">
-                    <span className="fw-bold text-success">
-                      <FaMoneyBillWave className="me-1" />
-                      {flight.price} BHD
-                    </span>
+                {/* ── Route ── */}
+                <div className="uf-route">
+                  <div className="uf-route-city">
+                    <span className="city">{flight.from_city}</span>
+                    <span className="country">{flight.from_country}</span>
                   </div>
 
-              <button  className="btn btn-primary btn-sm">View</button>
+                  <div className="uf-route-arrow">
+                    <div className="arrow-line">
+                      <MdFlightTakeoff />
+                    </div>
+                  </div>
 
-              
+                  <div className="uf-route-city" style={{ textAlign: "right" }}>
+                    <span className="city">{flight.to_city}</span>
+                    <span className="country">{flight.to_country}</span>
+                  </div>
+                </div>
+
+                {/* ── Times ── */}
+                <div className="uf-times">
+                  <div className="uf-time-cell">
+                    <span className="t-label">
+                      <FaPlaneDeparture /> Departure
+                    </span>
+                    <span className="t-value">
+                      {new Date(flight.departure_time).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="uf-time-cell">
+                    <span className="t-label">
+                      <FaPlaneArrival /> Arrival
+                    </span>
+                    <span className="t-value">
+                      {new Date(flight.arrival_time).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* ── Footer: price + CTA ── */}
+                <div className="uf-card-footer">
+                  <div className="uf-price">
+                    <span className="price-label">
+                      <FaMoneyBillWave style={{ marginRight: 3 }} />
+                      Price
+                    </span>
+                    <span className="price-value">{flight.price} BHD</span>
+                  </div>
+                  <span className="uf-btn-view">
+                    View <FaArrowRight />
+                  </span>
                 </div>
 
               </div>
             </Link>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
     </div>
-
   );
 }
 

@@ -1,0 +1,313 @@
+/* ═══════════════════════════════════════════════════════════
+   HOME USER - PROFESSIONAL CALM LIGHT THEME
+   ═══════════════════════════════════════════════════════════ */
+
+.hu-page {
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  background: #f0f3f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background blobs */
+.hu-page::before {
+  content: '';
+  position: fixed;
+  top: -100px; right: -100px;
+  width: 450px; height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,90,155,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hu-page::after {
+  content: '';
+  position: fixed;
+  bottom: -80px; left: -80px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(46,139,122,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   GUEST CARD (same as SignIn/HomeCompanyies)
+   ══════════════════════════════════════ */
+.hu-state-card {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border: 1px solid #dde3ef;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 28px rgba(58, 90, 155, 0.09);
+  animation: fadeUp 0.4s ease both;
+  position: relative;
+  z-index: 1;
+}
+
+.hu-state-banner {
+  background: linear-gradient(135deg, #1e3a7a 0%, #2a5298 45%, #2e8b7a 100%);
+  padding: 34px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.hu-state-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+}
+
+.hu-state-banner .banner-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.9);
+  position: relative;
+  z-index: 1;
+}
+
+.hu-state-banner h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.01em;
+}
+
+.hu-state-banner p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hu-state-body {
+  padding: 26px 28px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.hu-state-desc {
+  font-size: 0.84rem;
+  color: #6b7fa3;
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.hu-state-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ══════════════════════════════════════
+   LOGGED-IN WELCOME CARD
+   ══════════════════════════════════════ */
+.hu-welcome-card {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  border: 1px solid #dde3ef;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 28px rgba(58, 90, 155, 0.09);
+  animation: fadeUp 0.4s ease both;
+  position: relative;
+  z-index: 1;
+}
+
+/* Gradient header */
+.hu-welcome-header {
+  background: linear-gradient(135deg, #1e3a7a 0%, #2a5298 45%, #2e8b7a 100%);
+  padding: 36px 32px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.hu-welcome-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 22px 22px 0 0;
+}
+
+/* Avatar */
+.hu-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2.5px solid rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: rgba(255,255,255,0.85);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.hu-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.hu-welcome-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+  margin: 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.01em;
+}
+
+.hu-welcome-title span {
+  color: #ffffff;
+}
+
+.hu-welcome-sub {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.58);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Body */
+.hu-welcome-body {
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.hu-welcome-desc {
+  font-size: 0.875rem;
+  color: #6b7fa3;
+  text-align: center;
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════ */
+.hu-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: #3a5a9b;
+  border: 1px solid #3a5a9b;
+  border-radius: 11px;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  box-shadow: 0 3px 12px rgba(58,90,155,0.22);
+  flex: 1;
+}
+
+.hu-btn-primary:hover {
+  background: #2e4a85;
+  border-color: #2e4a85;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 90, 155, 0.3);
+}
+
+.hu-btn-primary.hu-btn-full {
+  width: 100%;
+  flex: none;
+  padding: 13px 28px;
+  font-size: 0.95rem;
+}
+
+.hu-btn-arrow {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  transition: transform 0.2s;
+}
+
+.hu-btn-primary:hover .hu-btn-arrow {
+  transform: translateX(3px);
+  opacity: 1;
+}
+
+.hu-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: #f7f8fc;
+  border: 1px solid #dde3ef;
+  border-radius: 11px;
+  color: #3d4f6e;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  flex: 1;
+}
+
+.hu-btn-outline:hover {
+  background: #eef2fa;
+  border-color: #b0bcd8;
+  color: #3a5a9b;
+  transform: translateY(-2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .hu-state-body,
+  .hu-welcome-body  { padding: 22px 22px 26px; }
+  .hu-state-banner,
+  .hu-welcome-header { padding: 28px 22px 24px; }
+  .hu-state-actions { flex-direction: column; }
+}
